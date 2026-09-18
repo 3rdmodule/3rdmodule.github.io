@@ -115,6 +115,17 @@ def brand(sub, cls=""):
     return (f'<span class="brand-tree">{TREE}</span>' if cls == "" else '<span class="brand-tree mask-tree"></span>') + \
            f'<span class="brand-name"><span class="sig" role="img" aria-label="Fabienne Hiot"></span><small>{sub}</small></span>'
 
+BRANCH = ('<div class="branch-wrap" aria-hidden="true"><svg class="branch reveal-branch" viewBox="0 0 600 70">'
+  '<path class="stem" d="M8 44 C 90 20, 170 62, 260 40 S 420 14, 520 36 S 580 44, 594 38"/>'
+  '<path class="lf" d="M70 33 q 6 -20 26 -22 q -4 20 -26 22z"/>'
+  '<path class="lf" d="M130 44 q 14 14 34 8 q -16 -16 -34 -8z"/>'
+  '<path class="lf" d="M205 44 q 4 -22 24 -26 q -2 22 -24 26z"/>'
+  '<path class="lf" d="M285 36 q 16 14 36 6 q -18 -14 -36 -6z"/>'
+  '<path class="lf" d="M350 26 q 6 -20 26 -22 q -4 20 -26 22z"/>'
+  '<path class="lf" d="M430 24 q 14 16 34 10 q -14 -18 -34 -10z"/>'
+  '<path class="lf" d="M500 34 q 4 -20 24 -24 q 0 22 -24 24z"/>'
+  '</svg></div>')
+
 NAV = [
   ("accueil", "Accueil", ""),
   ("pratiques", "Mes pratiques", None),
@@ -156,7 +167,7 @@ def header(active):
             mitems.append(f'<li><a href="{B}{path}"{ac}>{label}</a></li>')
     return f'''<a class="skip" href="#contenu">Aller au contenu</a>
 <div class="topbar"><div class="wrap">
-  <div class="tb-left"><span>{icon("pin")}Cabinet à Agay · Saint-Raphaël (83)</span><span>{icon("clock")}Du lundi au vendredi, 14 h – 18 h</span><span>{icon("sparkle")}Experte en biorésonance</span></div>
+  <div class="tb-left"><span>{icon("pin")}Nouveau cabinet : Mas de l'Esterel · PRO BTP, Agay</span><span>{icon("clock")}Du lundi au vendredi, 14 h – 18 h</span><span>{icon("sparkle")}Experte en biorésonance</span></div>
   <span>{icon("phone")}<a href="{TEL_HREF}">{TEL}</a></span>
 </div></div>
 <header class="header"><div class="wrap">
@@ -170,7 +181,7 @@ def header(active):
 <div class="mnav" id="mnav" aria-hidden="true">
   <ul>{"".join(mitems)}</ul>
   <div class="mnav-contact">
-    <p><strong>Cabinet à Agay, Saint-Raphaël</strong></p>
+    <p><strong>Mas de l'Esterel · PRO BTP, Agay</strong></p>
     <p>Du lundi au vendredi, 14 h – 18 h</p>
     <p><a href="{TEL_HREF}">{TEL}</a></p>
   </div>
@@ -179,11 +190,11 @@ def header(active):
 def footer():
     prat = "".join(f'<li><a href="{B}{p}">{l}</a></li>' for k, l, p, d in PRATIQUES)
     return f'''<footer class="footer"><div class="wrap">
+  <p class="f-statement">Vibrez en harmonie <em>pour votre bien-être.</em></p>
   <div class="f-grid">
     <div>
       <a class="brand" href="{B}" aria-label="Fabienne Hiot : accueil">{brand("Naturopathe, réflexologue &amp; masseuse faciale", "f")}</a>
-      <p>Vibrez en harmonie pour votre bien-être.</p>
-      <p class="f-disclaimer">Les conseils d'hygiène vitale et le rééquilibrage énergétique ne sauraient en aucun cas remplacer les conseils et soins de votre médecin traitant.</p>
+            <p class="f-disclaimer">Les conseils d'hygiène vitale et le rééquilibrage énergétique ne sauraient en aucun cas remplacer les conseils et soins de votre médecin traitant.</p>
     </div>
     <div><h4>Mes pratiques</h4><ul>{prat}<li><a href="{B}seances-et-tarifs/">Séances & tarifs</a></li></ul></div>
     <div><h4>Découvrir</h4><ul>
@@ -193,7 +204,7 @@ def footer():
       <li><a href="{B}mentions-legales/">Mentions légales</a></li>
     </ul></div>
     <div><h4>Cabinet</h4>
-      <p>Les Mas de l'Esterel<br>Centre de vacances Pro BTP · Centre bien-être<br>Boulevard de l'Esterel, Agay<br>83530 Saint-Raphaël</p>
+      <p>Mon nouveau cabinet&nbsp;:<br><strong>Les Mas de l'Esterel · PRO BTP</strong><br>Centre bien-être<br>Boulevard de l'Esterel, Agay<br>83530 Saint-Raphaël</p>
       <p><a href="{TEL_HREF}"><strong style="color:#fff">{TEL}</strong></a><br>Du lundi au vendredi, 14 h – 18 h</p>
     </div>
   </div>
@@ -270,7 +281,7 @@ def crumbs(items):
     return f'<nav aria-label="Fil d’Ariane"><ol class="crumbs">{"".join(lis)}</ol></nav>'
 
 def render(text):
-    text = text.replace("{{CTA}}", CTA).replace("{{AMMA}}", AMMA).replace("{{TREE}}", TREE)
+    text = text.replace("{{CTA}}", CTA).replace("{{AMMA}}", AMMA).replace("{{TREE}}", TREE).replace("{{BRANCH}}", BRANCH)
     text = re.sub(r"\{\{I:([a-z0-9_]+):?(\d+)?\}\}", lambda m: img(m.group(1), m.group(2) or "1200"), text)
     text = re.sub(r"\{\{L:([a-z0-9-]+)(?::(jpg))?\}\}", lambda m: B + "assets/img/" + m.group(1) + "." + (m.group(2) or "webp"), text)
     text = re.sub(r"\{\{ic:([a-z]+)\}\}", lambda m: icon(m.group(1)), text)

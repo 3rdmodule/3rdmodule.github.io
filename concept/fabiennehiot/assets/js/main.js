@@ -218,3 +218,28 @@
     window.addEventListener("resize",build); build();
   });
 })();
+
+/* ===== V3 : branches dessinées, image au survol de l'index ===== */
+(function(){
+  "use strict";
+  var d=document;
+  var br=d.querySelectorAll(".reveal-branch");
+  if("IntersectionObserver" in window){
+    var io=new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add("in"); io.unobserve(e.target); } }); },{threshold:.4});
+    br.forEach(function(b){ io.observe(b); });
+  } else br.forEach(function(b){ b.classList.add("in"); });
+
+  var idx=d.querySelector(".index");
+  if(idx && window.matchMedia("(hover:hover) and (min-width:961px)").matches){
+    var box=d.createElement("div"); box.className="hover-img"; box.setAttribute("aria-hidden","true");
+    var im=d.createElement("img"); im.alt=""; box.appendChild(im); d.body.appendChild(box);
+    var x=0,y=0,cx=0,cy=0,raf=null;
+    function loop(){ cx+=(x-cx)*.16; cy+=(y-cy)*.16; box.style.left=cx+"px"; box.style.top=cy+"px"; raf=requestAnimationFrame(loop); }
+    idx.querySelectorAll("a[data-img]").forEach(function(a){
+      a.addEventListener("mouseenter",function(e){ im.src=a.getAttribute("data-img"); x=cx=e.clientX+150; y=cy=e.clientY; box.classList.add("on"); if(!raf) loop(); });
+      a.addEventListener("mousemove",function(e){ x=e.clientX+150; y=e.clientY; });
+      a.addEventListener("mouseleave",function(){ box.classList.remove("on"); });
+    });
+    idx.addEventListener("mouseleave",function(){ cancelAnimationFrame(raf); raf=null; });
+  }
+})();
