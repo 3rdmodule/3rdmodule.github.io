@@ -19,7 +19,7 @@ EMAIL = "fabienne.hiot@gmail.com"
 RESALIB = "https://www.resalib.fr/praticien/46854-fabienne-hiot-naturopathe-saint-raphael"
 MAPS_EMBED = "https://maps.google.com/maps?q=Les%20Mas%20de%20l%27Esterel%2C%20Boulevard%20de%20l%27Esterel%2C%2083530%20Agay&z=14&output=embed"
 MAPS_LINK = "https://maps.google.com/maps?q=Les%20Mas%20de%20l%27Esterel%2C%20Boulevard%20de%20l%27Esterel%2C%2083530%20Agay"
-FONTS = "https://fonts.bunny.net/css?family=fraunces:400,400i,500,500i|figtree:400,500,600,700&display=swap"
+FONTS = "https://fonts.bunny.net/css?family=fraunces:400,400i,500,500i|figtree:400,500,600,700|parisienne:400&display=swap"
 
 CDN = "https://files.sbcdnsb.com/images/K8kpRHTzjVHzMcMoHadfow/content/"
 IMG = {
@@ -108,13 +108,12 @@ def icon(name, cls=""):
     c = f' class="{cls}"' if cls else ""
     return f'<svg{c} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">{ICONS[name]}</svg>'
 
-# Emblème : un arbre-racines, clin d'œil au logo d'origine de Fabienne
-MARK = '''<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-<circle cx="24" cy="24" r="22.5" stroke-opacity=".35"/>
-<path d="M24 38V14"/>
-<path d="M24 38c-2.5 0-5 1.2-7 3M24 38c2.5 0 5 1.2 7 3M24 38v3.5"/>
-<path d="M24 29c-3-.4-5.8-2.2-7.2-5.2 3.4-.4 6 1.3 7.2 5.2zM24 25c3-.4 5.8-2.2 7.2-5.2-3.4-.4-6 1.3-7.2 5.2zM24 20.5c-2.6-.6-4.6-2.6-5.2-5.4 2.9.2 4.8 2.2 5.2 5.4zM24 17c2.4-.6 4.2-2.5 4.8-5.1-2.7.2-4.4 2.1-4.8 5.1zM24 14c-.9-1.7-.9-3.6 0-5.5.9 1.9.9 3.8 0 5.5z" fill="currentColor" fill-opacity=".14"/>
-</svg>'''
+# Logo de Fabienne : arbre (vectorisé depuis son logo, feuilles séparées pour l'animation) + signature
+TREE = open(os.path.join(HERE, "tree.svg"), encoding="utf-8").read().replace('<svg ', '<svg class="tree-mark" aria-hidden="true" ', 1)
+AMMA = open(os.path.join(HERE, "amma.svg"), encoding="utf-8").read()
+def brand(sub, cls=""):
+    return (f'<span class="brand-tree">{TREE}</span>' if cls == "" else '<span class="brand-tree mask-tree"></span>') + \
+           f'<span class="brand-name"><span class="sig" role="img" aria-label="Fabienne Hiot"></span><small>{sub}</small></span>'
 
 NAV = [
   ("accueil", "Accueil", ""),
@@ -157,14 +156,14 @@ def header(active):
             mitems.append(f'<li><a href="{B}{path}"{ac}>{label}</a></li>')
     return f'''<a class="skip" href="#contenu">Aller au contenu</a>
 <div class="topbar"><div class="wrap">
-  <div class="tb-left"><span>{icon("pin")}Cabinet à Agay · Saint-Raphaël (83)</span><span>{icon("clock")}Du lundi au vendredi, 14 h – 18 h</span></div>
+  <div class="tb-left"><span>{icon("pin")}Cabinet à Agay · Saint-Raphaël (83)</span><span>{icon("clock")}Du lundi au vendredi, 14 h – 18 h</span><span>{icon("sparkle")}Experte en biorésonance</span></div>
   <span>{icon("phone")}<a href="{TEL_HREF}">{TEL}</a></span>
 </div></div>
 <header class="header"><div class="wrap">
-  <a class="brand" href="{B}" aria-label="Fabienne Hiot, naturopathe : accueil">{MARK}<span class="brand-name">Fabienne Hiot<small>Naturopathe · Saint-Raphaël</small></span></a>
+  <a class="brand" href="{B}" aria-label="Fabienne Hiot, naturopathe : accueil">{brand("Naturopathe · Biorésonance")}</a>
   <nav aria-label="Navigation principale"><ul class="menu">{"".join(items)}</ul></nav>
   <div class="nav-cta">
-    <a class="btn" href="{RESALIB}" target="_blank" rel="noopener">{icon("calendar")}Prendre rendez-vous</a>
+    <a class="btn" href="{RESALIB}" target="_blank" rel="noopener">{icon("calendar")}Rendez-vous</a>
     <button class="burger" aria-expanded="false" aria-controls="mnav" aria-label="Ouvrir le menu"><span></span><span></span><span></span></button>
   </div>
 </div></header>
@@ -182,7 +181,7 @@ def footer():
     return f'''<footer class="footer"><div class="wrap">
   <div class="f-grid">
     <div>
-      <a class="brand" href="{B}">{MARK}<span class="brand-name">Fabienne Hiot<small>Naturopathe · Réflexologue · Biorésonance</small></span></a>
+      <a class="brand" href="{B}" aria-label="Fabienne Hiot : accueil">{brand("Naturopathe, réflexologue &amp; masseuse faciale", "f")}</a>
       <p>Vibrez en harmonie pour votre bien-être.</p>
       <p class="f-disclaimer">Les conseils d'hygiène vitale et le rééquilibrage énergétique ne sauraient en aucun cas remplacer les conseils et soins de votre médecin traitant.</p>
     </div>
@@ -207,8 +206,8 @@ def footer():
 
 CTA = f'''<section class="section tight"><div class="wrap">
 <div class="cta-band reveal">
-  <div><h2>Prenez soin de vous, <em>naturellement.</em></h2>
-  <p>Réservez votre séance en ligne sur Resalib ou appelez-moi : le premier échange téléphonique est gratuit (15 min maximum).</p></div>
+  <div><p class="hand">À bientôt au cabinet,</p><h2>Augmentez votre vitalité, <em>baissez votre stress.</em></h2>
+  <p>Réservez votre séance en ligne sur Resalib ou appelez-moi : le premier échange téléphonique est gratuit (15 min maximum). Des séances individuelles, pour un bien-être sur mesure.</p></div>
   <div class="btn-row">
     <a class="btn btn-light" href="{RESALIB}" target="_blank" rel="noopener">{icon("calendar")}Prendre rendez-vous</a>
     <a class="btn btn-ghost" href="{TEL_HREF}">{icon("phone")}{TEL}</a>
@@ -271,7 +270,7 @@ def crumbs(items):
     return f'<nav aria-label="Fil d’Ariane"><ol class="crumbs">{"".join(lis)}</ol></nav>'
 
 def render(text):
-    text = text.replace("{{CTA}}", CTA)
+    text = text.replace("{{CTA}}", CTA).replace("{{AMMA}}", AMMA).replace("{{TREE}}", TREE)
     text = re.sub(r"\{\{I:([a-z0-9_]+):?(\d+)?\}\}", lambda m: img(m.group(1), m.group(2) or "1200"), text)
     text = re.sub(r"\{\{L:([a-z0-9-]+)(?::(jpg))?\}\}", lambda m: B + "assets/img/" + m.group(1) + "." + (m.group(2) or "webp"), text)
     text = re.sub(r"\{\{ic:([a-z]+)\}\}", lambda m: icon(m.group(1)), text)
