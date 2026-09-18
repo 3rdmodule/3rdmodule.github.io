@@ -36,8 +36,8 @@
     'work.kicker': 'Réalisations', 'work.title': "Ce que j'ai construit",
     'work.lead': "Cinq sites, tous en ligne. Mon label, mon portfolio, et des sites faits avec des potes artistes. Clique, ils sont vrais.",
     'w1.desc': "Le site de mon label. Les sorties, les artistes, un formulaire pour envoyer ses démos, un vinyle à scratcher et un jeu de canards caché.",
-    'w2.desc': "Un beat store fait avec l'artiste. Écoute, licences, panier, et sept langues, arabe compris.",
-    'w3.desc': "Des drum kits et des beats pour un producteur lofi, fait avec lui. En français et en anglais, paiement via Gumroad.",
+    'w2.desc': "Un beat store fait en collaboration avec anbuu. Écoute, licences, panier, et sept langues, arabe compris.",
+    'w3.desc': "Des drum kits et des beats pour Swink, producteur lofi. Fait en collaboration avec lui, en français et en anglais, paiement via Gumroad.",
     'w4.desc': "Un site d'une page pour une artiste indie-pop. Un seul but : faire écouter le nouveau single.",
     'w5.desc': "Mon portfolio de compositeur et ingé son. Showreel, une playlist sync qu'on peut écouter, les projets, le contact.",
     't.label': 'Label', 't.multi': 'Multi-pages', 't.form': 'Formulaires', 't.audio': 'Audio web', 't.shop': 'Beat store', 't.lang7': '7 langues',
@@ -341,6 +341,6 @@
     send.disabled = false;
   });
   $('#copy').addEventListener('click', async () => {
-    try { await navigator.clipboard.writeText('gwezheneg.web@gmail.com'); const b = $('#copy'); const o = b.innerHTML; b.textContent = MSG[lang].copied; setTimeout(() => { b.innerHTML = lang === 'fr' ? FR['ct.copy'] : EN['ct.copy']; }, 1600); } catch (e) {}
+    try { await navigator.clipboard.writeText('3rdmodule@gmail.com'); const b = $('#copy'); const o = b.innerHTML; b.textContent = MSG[lang].copied; setTimeout(() => { b.innerHTML = lang === 'fr' ? FR['ct.copy'] : EN['ct.copy']; }, 1600); } catch (e) {}
   });
 })();
