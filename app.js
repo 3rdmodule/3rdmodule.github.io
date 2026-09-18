@@ -175,7 +175,7 @@
   }
 
   /* ---------- Playground: drum machine (Web Audio) ---------- */
-  const ROWS = [{ k: 'kick', l: 'Kick' }, { k: 'snare', l: 'Snare' }, { k: 'hat', l: 'Hats' }, { k: 'melody', l: 'Melody' }];
+  const ROWS = [{ k: 'kick', l: 'Kick' }, { k: 'snare', l: 'Snare' }, { k: 'hat', l: 'Hats' }, { k: 'pluck', l: 'Pluck' }];
   const STEPS = 16;
   const pattern = [
     [1,0,0,0, 0,0,0,1, 0,0,1,0, 0,0,0,0],
@@ -216,6 +216,7 @@
     dl = ctx.createDelay(1); const fb = ctx.createGain(), dlf = ctx.createBiquadFilter(), dwet = ctx.createGain();
     dl.delayTime.value = 60 / bpm * .75; fb.gain.value = .3; dlf.type = 'lowpass'; dlf.frequency.value = 2600; dwet.gain.value = .28;
     bellBus.connect(dl); dl.connect(dlf); dlf.connect(fb); fb.connect(dl); dlf.connect(dwet); dwet.connect(verb); dwet.connect(master);
+    setTimeout(() => MEL.forEach(pluckBuf), 0); // pre-render the pluck notes
     Object.keys(raw).forEach(r => raw[r].then(b => b && ctx.decodeAudioData(b.slice(0))).then(buf => { if (buf) samples[r] = buf; }).catch(() => {}));
   };
   // A minor / harmonic minor line, one note per step: E5 D5 C5 C5 B4 A4 A4 B4 B4 C5 C5 B4 A4 G#4 G#4 E4
@@ -238,19 +239,43 @@
       g.gain.setValueAtTime(r === 1 ? .7 : .35, t); g.gain.exponentialRampToValueAtTime(.001, t + len);
       n.connect(f); f.connect(g); g.connect(master); n.start(t); n.stop(t + len + .02);
       if (r === 1) { const o = ctx.createOscillator(), og = ctx.createGain(); o.type = 'triangle'; o.frequency.value = 190; og.gain.setValueAtTime(.35, t); og.gain.exponentialRampToValueAtTime(.001, t + .1); o.connect(og); og.connect(master); o.start(t); o.stop(t + .12); }
-    } else { // melody: soft trap pluck, two detuned triangles + a sine an octave down, through the reverb/delay bus
-      const hz = MEL[s % MEL.length];
-      const out = ctx.createGain(), f = ctx.createBiquadFilter(); f.type = 'lowpass'; f.Q.value = .7;
-      f.frequency.setValueAtTime(3200, t); f.frequency.exponentialRampToValueAtTime(700, t + .5);
-      out.gain.setValueAtTime(.0001, t); out.gain.exponentialRampToValueAtTime(.16, t + .012); out.gain.exponentialRampToValueAtTime(.05, t + .25); out.gain.exponentialRampToValueAtTime(.0001, t + 1.3);
-      f.connect(out); out.connect(bellBus);
-      [[1, -6, 'triangle', .6], [1, 6, 'triangle', .6], [.5, 0, 'sine', .5]].forEach(([m, cents, type, v]) => {
-        const o = ctx.createOscillator(), g = ctx.createGain(); o.type = type; o.frequency.value = hz * m; o.detune.value = cents; g.gain.value = v;
-        o.connect(g); g.connect(f); o.start(t); o.stop(t + 1.4);
-      });
+    } else { // pluck: plucked-string model rendered once per note, two slightly detuned strings panned L/R
+      const src = ctx.createBufferSource(), g = ctx.createGain();
+      src.buffer = pluckBuf(MEL[s % MEL.length]); g.gain.value = .55;
+      src.connect(g); g.connect(bellBus); src.start(t);
     }
   };
-  let bpm = 140, step = 0, nextT = 0, timer = null;
+  // Karplus-Strong string with fractional delay tuning and a soft, filtered pick.
+  const pluckCache = {};
+  const ksString = (sr, hz, len, bright) => {
+    const out = new Float32Array(len), P = sr / hz, D = P - .5, i0 = Math.floor(D), fr = D - i0;
+    const g = Math.pow(.001, 1 / (hz * 1.9)); // ~1.9 s tail whatever the note
+    let lp = 0;
+    for (let n = 0; n < len; n++) {
+      let x = 0;
+      if (n < P) { lp += bright * ((Math.random() * 2 - 1) - lp); x = lp; }
+      const r = k => (n - k >= 0 ? out[n - k] : 0);
+      const s1 = r(i0) * (1 - fr) + r(i0 + 1) * fr, s2 = r(i0 + 1) * (1 - fr) + r(i0 + 2) * fr;
+      out[n] = x + g * .5 * (s1 + s2);
+    }
+    return out;
+  };
+  const pluckBuf = (hz) => {
+    const key = hz.toFixed(2); if (pluckCache[key]) return pluckCache[key];
+    const sr = ctx.sampleRate, len = Math.floor(sr * 2), buf = ctx.createBuffer(2, len, sr);
+    const a = ksString(sr, hz * Math.pow(2, -4 / 1200), len, .5), b = ksString(sr, hz * Math.pow(2, 4 / 1200), len, .45);
+    const L = buf.getChannelData(0), R = buf.getChannelData(1);
+    let peak = 0;
+    for (let n = 0; n < len; n++) {
+      const sub = Math.sin(2 * Math.PI * hz / 2 * n / sr) * Math.exp(-n / sr * 3) * .25; // a little body under the string
+      const atk = Math.min(1, n / (sr * .003)); // 3 ms fade-in, no click
+      L[n] = (a[n] * .8 + b[n] * .35 + sub) * atk; R[n] = (b[n] * .8 + a[n] * .35 + sub) * atk;
+      peak = Math.max(peak, Math.abs(L[n]), Math.abs(R[n]));
+    }
+    for (let n = 0; n < len; n++) { L[n] /= peak; R[n] /= peak; }
+    return (pluckCache[key] = buf);
+  };
+  let bpm = 100, step = 0, nextT = 0, timer = null;
   const drawQueue = [];
   const schedule = () => {
     while (nextT < ctx.currentTime + .1) {
