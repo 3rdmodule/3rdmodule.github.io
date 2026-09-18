@@ -28,44 +28,44 @@
   /* ---------- i18n ---------- */
   const FR = {
     'skip': 'Aller au contenu',
-    'nav.work': 'Réalisations', 'nav.services': 'Ce que je fais', 'nav.process': 'Comment ça marche', 'nav.play': 'Playground', 'nav.cta': 'On en parle ?',
-    'hero.status': 'Dispo pour de nouveaux projets',
+    'nav.work': 'Réalisations', 'nav.services': 'Ce que je fais', 'nav.process': 'Comment ça marche', 'nav.play': 'Playground', 'nav.cta': 'Contact',
+    'hero.status': 'Ouvert aux nouvelles collaborations',
     'hero.l1': 'Ton site,', 'hero.l2': 'en ligne sur',
-    'hero.sub': "Je crée des sites pour les artistes, les créateurs et les petites marques. Tu m'envoies ton nom de domaine, ou juste l'idée. Je le dessine, je le construis et je le mets en ligne pour toi.",
-    'hero.cta1': 'Lancer un projet', 'hero.cta2': "Voir ce que j'ai fait", 'hero.foot': 'Passe ta souris sur la grille ↗',
-    'work.kicker': 'Réalisations', 'work.title': "Ce que j'ai construit",
-    'work.lead': "Cinq sites, tous en ligne. Mon label, mon portfolio, et des sites faits avec des potes artistes. Clique, ils sont vrais.",
-    'w1.desc': "Le site de mon label. Les sorties, les artistes, un formulaire pour envoyer ses démos, un vinyle à scratcher et un jeu de canards caché.",
-    'w2.desc': "Un beat store fait en collaboration avec anbuu. Écoute, licences, panier, et sept langues, arabe compris.",
-    'w3.desc': "Des drum kits et des beats pour Swink, producteur lofi. Fait en collaboration avec lui, en français et en anglais, paiement via Gumroad.",
-    'w4.desc': "Un site d'une page pour une artiste indie-pop. Un seul but : faire écouter le nouveau single.",
-    'w5.desc': "Mon portfolio de compositeur et ingé son. Showreel, une playlist sync qu'on peut écouter, les projets, le contact.",
+    'hero.sub': "Créateur de sites pour artistes, creators et petites entreprises. Envoie-moi ton nom de domaine, ou simplement l'idée derrière ton site. Je le conceptualise, je le construis puis je le mets en ligne pour toi.",
+    'hero.cta1': 'Lancer un projet', 'hero.cta2': "Voir ce que j'ai fait",
+    'work.kicker': 'Réalisations', 'work.title': "Mes dernières réalisations",
+    'work.lead': "Voici mes cinq dernières réalisations : mon label, et des sites faits en collaboration avec plusieurs artistes.",
+    'w1.desc': "Le site de mon label. Les sorties, les artistes, un formulaire pour envoyer ses démos, un vinyle à scratcher et un mini-jeu caché.",
+    'w2.desc': "Un beat store fait en collaboration avec anbuu. Player, système de licences, panier, et une multitude de langues.",
+    'w3.desc': "Un beat & kits store fait en collaboration avec Swink. Player, et système de paiement via Gumroad.",
+    'w4.desc': "Un site d'une page pour une artiste indie-pop, avec pour objectif de mettre en avant sa dernière sortie.",
+    'w5.desc': "Mon portfolio de compositeur et ingénieur du son. Showreel, playlist avec player, projets et formulaire de contact.",
     't.label': 'Label', 't.multi': 'Multi-pages', 't.form': 'Formulaires', 't.audio': 'Audio web', 't.shop': 'Beat store', 't.lang7': '7 langues',
     't.digital': 'Produits numériques', 't.onepage': 'Une page', 't.artist': 'Artiste', 't.video': 'Vidéo & audio',
-    'svc.kicker': 'Ce que je fais', 'svc.title': 'Choisis ta taille',
-    'svc.lead': "Chaque site est fait pour toi, marche sur téléphone, et part en ligne sur ton domaine. On se met d'accord sur le contenu avant que je commence, comme ça pas de surprise.",
-    's1.t': 'Page de lancement', 's1.d': "Une page qui dit qui tu es et quoi faire ensuite. Parfait pour une sortie, un projet ou le lien en bio.", 's1.m': '1 page',
-    's2.t': 'Petit site', 's2.d': "Quelques pages pour une marque ou un indépendant. Accueil, à propos, réalisations, contact, avec un vrai formulaire.", 's2.m': "Jusqu'à 4 pages",
-    's3.t': 'Site complet', 's3.d': "Le site entier. Plus de pages, ta musique ou tes vidéos intégrées, et les bases pour que Google comprenne ton site.", 's3.m': "Jusqu'à 7 pages",
-    's4.t': 'Suivi du site', 's4.d': "Ton site est en ligne, et tu veux changer une date, ajouter une sortie, remplacer une photo. Je m'en occupe chaque mois.", 's4.m': 'Au mois',
+    'svc.kicker': 'Ce que je fais', 'svc.title': 'Choisis ton format',
+    'svc.lead': "Chaque site est sur-mesure, compatible téléphone, et mis en ligne sur le nom de domaine que tu as choisi. On établit ensemble le cahier des charges et je t'envoie une démo sous cinq jours.",
+    's1.t': 'Page de lancement', 's1.d': "Une page qui peut dire qui tu es, présenter un projet, teaser une sortie ou servir de portfolio.", 's1.m': '1 page',
+    's2.t': 'Petit site', 's2.d': "Quelques pages pour une marque ou un indépendant. Accueil, à propos, réalisations, contact, avec un formulaire de contact.", 's2.m': "Jusqu'à 4 pages",
+    's3.t': 'Site complet', 's3.d': "Un site riche. Plus de pages, de la musique et des vidéos intégrées, et une bonne base SEO (référencement Google).", 's3.m': "Jusqu'à 7 pages",
+    's4.t': 'Suivi du site', 's4.d': "Une fois ton site en ligne, je vérifie chaque semaine qu'il fonctionne bien. Je fais les petites modifications : changer une date, ajouter une sortie, remplacer des médias, etc.", 's4.m': 'Au mois',
     'x1': 'Deuxième langue', 'x2': 'Branchement du domaine', 'x3': 'Formulaires de contact', 'x4': 'Spotify & YouTube', 'x5': 'Petite boutique', 'x6': 'Refonte', 'x7': 'Bases SEO',
-    'pr.kicker': 'Comment ça marche', 'pr.title': "De ton idée à ton domaine",
-    'p1.t': 'Tu me racontes', 'p1.d': "Ce que tu fais, pour qui, et ce que tu veux que les gens fassent sur le site. Envoie tes textes, photos et logo si tu en as.",
-    'p2.t': "Je t'envoie une première version", 'p2.d': "Une vraie page que tu ouvres sur ton téléphone, pas un PDF. Tu vois tout de suite où on va.",
+    'pr.kicker': 'Comment ça marche', 'pr.title': "D'une idée à un site abouti",
+    'p1.t': 'Tu expliques ton idée', 'p1.d': "Ce que tu fais, pour qui, et ce que tu veux que les gens fassent sur le site. Envoie tes textes, photos et logo si tu en as.",
+    'p2.t': "Je t'envoie une première version", 'p2.d': "Une vraie page que tu ouvres sur ton téléphone ou ton PC. Tu vois tout de suite où on va.",
     'p3.t': 'On ajuste', 'p3.d': "Tu me dis ce qu'il faut changer. On corrige ensemble jusqu'à ce que ça te ressemble.",
-    'p4.t': 'Il part en ligne', 'p4.d': "Je le branche sur ton domaine et je le mets en ligne. Tu as le lien, et il est à toi.",
-    'pl.title': 'Je fais aussi de la musique', 'pl.lead': "Alors voilà une petite boîte à rythmes. Elle tourne directement dans ton navigateur, rien à installer. Clique sur les carrés, lance la lecture.",
+    'p4.t': 'On le met en ligne', 'p4.d': "Je l'incorpore à ton domaine et je le mets en ligne. Tu as le lien, et il est à toi.",
+    'pl.title': "Un exemple de ce qu'on peut imaginer", 'pl.lead': "Voilà une petite boîte à rythmes. Elle fonctionne directement dans ton navigateur, tu n'as rien à installer.",
     'pl.play': 'Lecture', 'pl.stop': 'Stop', 'pl.clear': 'Effacer', 'pl.rand': 'Surprends-moi',
-    'fq.title': 'Les questions qu’on me pose',
+    'fq.title': 'Les questions fréquentes',
     'f1.q': "Je n'ai pas encore de nom de domaine, c'est grave ?", 'f1.a': "Pas du tout. Je te dis où l'acheter (entre 10 et 20 € par an environ). Il est à ton nom, donc il reste à toi.",
-    'f2.q': 'À qui appartient le site ?', 'f2.a': "À toi. Ton domaine, ton contenu, ton site. Si un jour tu veux bosser avec quelqu'un d'autre, tu peux.",
+    'f2.q': 'Le site m’appartient ?', 'f2.a': "Oui, il est à toi. C'est ton domaine, ton contenu, ton site. Si un jour tu veux travailler dessus avec quelqu'un d'autre, tu peux.",
     'f3.q': 'Je peux le modifier moi-même ?', 'f3.a': "Par défaut, c'est moi qui fais les changements, c'est à ça que sert le suivi. Si tu veux vraiment modifier des choses toi-même, dis-le moi au départ et on le prévoit.",
     'f4.q': 'Ça prend combien de temps ?', 'f4.a': "En général une à deux semaines, selon la taille du site et la vitesse à laquelle je reçois ton contenu.",
     'f5.q': 'Tu fais les grosses boutiques en ligne ?', 'f5.a': "Non. Je peux monter une petite boutique pour quelques produits ou des téléchargements. Pour une grosse boutique avec stock et livraisons, il te faut un spécialiste, et je te le dirai franchement.",
     'ct.title': 'Parle-moi de ton projet', 'ct.lead': "Quelques lignes suffisent. Je lis tout moi-même et je réponds en français ou en anglais.", 'ct.copy': "Copier l'email",
     'fm.name': 'Ton nom', 'fm.email': 'Ton email', 'fm.domain': "Ton domaine (si tu en as un)", 'fm.need': "De quoi tu as besoin ?", 'fm.unsure': 'Je ne sais pas encore',
-    'fm.msg': 'Ton projet, en quelques mots', 'fm.send': 'Envoyer',
-    'ba.kicker': 'Refonte', 'ba.title': 'Ton vieux site, refait', 'ba.lead': "Fais glisser la poignée. Même artiste, mêmes infos, juste fait pour aujourd'hui. Celui-là est un exemple inventé, mais c'est exactement ce que je fais avec de vrais sites.", 'ba.before': 'Avant', 'ba.after': 'Après',
+    'fm.msg': 'Ton projet, en quelques mots', 'fm.send': 'Envoyer', 'fm.note': 'Je me sers de tes infos uniquement pour te répondre. Pas de newsletter, pas de partage. <a href="legal.html">Mentions légales</a>',
+    'ba.kicker': 'Refonte', 'ba.title': 'Ton site, mais en mieux.', 'ba.lead': "Fais glisser le séparateur. Même artiste, mêmes infos, mais plus adapté à l'internet d'aujourd'hui. Cet avant-après est fictif mais représente mon travail réel.", 'ba.before': 'Avant', 'ba.after': 'Après',
     'ft.family': 'Fait partie de la famille 3rd, avec <a href="https://3rdrecords.com" target="_blank" rel="noopener">3rd Records</a>', 'ft.legal': 'Mentions légales'
   };
   const MSG = {
@@ -175,13 +175,13 @@
   }
 
   /* ---------- Playground: drum machine (Web Audio) ---------- */
-  const ROWS = [{ k: 'kick', l: 'Kick' }, { k: 'snare', l: 'Snare' }, { k: 'hat', l: 'Hat' }, { k: 'keys', l: 'Keys' }];
+  const ROWS = [{ k: 'kick', l: 'Kick' }, { k: 'snare', l: 'Snare' }, { k: 'hat', l: 'Hat' }, { k: 'bells', l: 'Bells' }];
   const STEPS = 16;
   const pattern = [
     [1,0,0,0, 0,0,0,0, 1,0,1,0, 0,0,0,0],
     [0,0,0,0, 1,0,0,0, 0,0,0,0, 1,0,0,0],
     [1,0,1,0, 1,0,1,0, 1,0,1,0, 1,0,1,1],
-    [1,0,0,0, 0,0,1,0, 0,0,0,0, 0,1,0,0]
+    [1,0,0,1, 0,0,1,0, 0,1,0,0, 1,0,0,0]
   ];
   const grid = $('#seq-grid'); const btns = [];
   ROWS.forEach((row, r) => {
@@ -194,7 +194,10 @@
       grid.appendChild(b); btns[r][s] = b;
     }
   });
-  let ctx, master, noiseBuf;
+  let ctx, master, noiseBuf, bellBus;
+  // Drop your own one-shots here (e.g. { 0: 'sounds/kick.wav', 1: 'sounds/snare.wav', 2: 'sounds/hat.wav' }); synth is the fallback.
+  const SAMPLE_FILES = {};
+  const samples = {};
   const ensureCtx = () => {
     if (ctx) { if (ctx.state === 'suspended') ctx.resume(); return; }
     ctx = new (window.AudioContext || window.webkitAudioContext)();
@@ -202,9 +205,22 @@
     const comp = ctx.createDynamicsCompressor(); master.connect(comp); comp.connect(ctx.destination);
     noiseBuf = ctx.createBuffer(1, ctx.sampleRate * .5, ctx.sampleRate);
     const d = noiseBuf.getChannelData(0); for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
+    // bells go through a soft stereo delay + long reverb
+    bellBus = ctx.createGain(); bellBus.gain.value = 1; bellBus.connect(master);
+    const len = ctx.sampleRate * 3.2, ir = ctx.createBuffer(2, len, ctx.sampleRate);
+    for (let c = 0; c < 2; c++) { const ch = ir.getChannelData(c); for (let i = 0; i < len; i++) ch[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 3.2); }
+    const verb = ctx.createConvolver(); verb.buffer = ir; const wet = ctx.createGain(); wet.gain.value = .55;
+    bellBus.connect(verb); verb.connect(wet); wet.connect(master);
+    const dl = ctx.createDelay(1), fb = ctx.createGain(), dlf = ctx.createBiquadFilter(), dwet = ctx.createGain();
+    dl.delayTime.value = .36; fb.gain.value = .32; dlf.type = 'lowpass'; dlf.frequency.value = 2600; dwet.gain.value = .28;
+    bellBus.connect(dl); dl.connect(dlf); dlf.connect(fb); fb.connect(dl); dlf.connect(dwet); dwet.connect(verb); dwet.connect(master);
+    Object.entries(SAMPLE_FILES).forEach(([r, url]) => {
+      fetch(url).then(res => res.ok ? res.arrayBuffer() : Promise.reject()).then(b => ctx.decodeAudioData(b)).then(buf => { samples[r] = buf; }).catch(() => {});
+    });
   };
-  const SCALE = [220, 261.63, 293.66, 329.63, 392, 440, 523.25, 587.33]; // A minor pentatonic-ish
+  const ARP = [440, 554.37, 659.25, 783.99, 880, 1108.73, 1318.51, 1567.98]; // A7: A C# E G, rising
   const voice = (r, t, s) => {
+    if (samples[r]) { const b = ctx.createBufferSource(); b.buffer = samples[r]; b.connect(master); b.start(t); return; }
     if (r === 0) { // kick
       const o = ctx.createOscillator(), g = ctx.createGain();
       o.frequency.setValueAtTime(150, t); o.frequency.exponentialRampToValueAtTime(42, t + .18);
@@ -217,13 +233,20 @@
       g.gain.setValueAtTime(r === 1 ? .7 : .35, t); g.gain.exponentialRampToValueAtTime(.001, t + len);
       n.connect(f); f.connect(g); g.connect(master); n.start(t); n.stop(t + len + .02);
       if (r === 1) { const o = ctx.createOscillator(), og = ctx.createGain(); o.type = 'triangle'; o.frequency.value = 190; og.gain.setValueAtTime(.35, t); og.gain.exponentialRampToValueAtTime(.001, t + .1); o.connect(og); og.connect(master); o.start(t); o.stop(t + .12); }
-    } else { // keys
-      const o = ctx.createOscillator(), o2 = ctx.createOscillator(), g = ctx.createGain(), f = ctx.createBiquadFilter();
-      const hz = SCALE[(s * 3) % SCALE.length];
-      o.type = 'sawtooth'; o2.type = 'triangle'; o.frequency.value = hz; o2.frequency.value = hz * 2.003;
-      f.type = 'lowpass'; f.frequency.setValueAtTime(2400, t); f.frequency.exponentialRampToValueAtTime(500, t + .4);
-      g.gain.setValueAtTime(.0001, t); g.gain.exponentialRampToValueAtTime(.22, t + .01); g.gain.exponentialRampToValueAtTime(.001, t + .6);
-      o.connect(f); o2.connect(f); f.connect(g); g.connect(master); o.start(t); o2.start(t); o.stop(t + .65); o2.stop(t + .65);
+    } else { // bells: glassy FM tone with a long tail, A7 arpeggio going up
+      let n = 0; for (let i = 0; i < s; i++) if (pattern[3][i]) n++;
+      const hz = ARP[n % ARP.length];
+      const out = ctx.createGain(); out.connect(bellBus);
+      out.gain.setValueAtTime(.0001, t); out.gain.exponentialRampToValueAtTime(.2, t + .006); out.gain.exponentialRampToValueAtTime(.0001, t + 3.2);
+      const car = ctx.createOscillator(), mod = ctx.createOscillator(), mg = ctx.createGain();
+      car.frequency.value = hz; mod.frequency.value = hz * 3.5;
+      mg.gain.setValueAtTime(hz * 2.2, t); mg.gain.exponentialRampToValueAtTime(hz * .05, t + 1.4);
+      mod.connect(mg); mg.connect(car.frequency); car.connect(out);
+      [[2.001, .1, 1.6], [4.07, .04, .5], [1.0015, .12, 3]].forEach(([m, v, d]) => {
+        const o = ctx.createOscillator(), g = ctx.createGain(); o.frequency.value = hz * m;
+        g.gain.setValueAtTime(v, t); g.gain.exponentialRampToValueAtTime(.0001, t + d); o.connect(g); g.connect(out); o.start(t); o.stop(t + d + .05);
+      });
+      car.start(t); mod.start(t); car.stop(t + 3.3); mod.stop(t + 3.3);
     }
   };
   let bpm = 92, step = 0, nextT = 0, timer = null;
