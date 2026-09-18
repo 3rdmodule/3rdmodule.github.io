@@ -175,13 +175,13 @@
   }
 
   /* ---------- Playground: drum machine (Web Audio) ---------- */
-  const ROWS = [{ k: 'kick', l: 'Kick' }, { k: 'snare', l: 'Snare' }, { k: 'hat', l: 'Hat' }, { k: 'bells', l: 'Bells' }];
+  const ROWS = [{ k: 'kick', l: 'Kick' }, { k: 'snare', l: 'Snare' }, { k: 'hat', l: 'Hats' }, { k: 'melody', l: 'Melody' }];
   const STEPS = 16;
   const pattern = [
-    [1,0,0,0, 0,0,0,0, 1,0,1,0, 0,0,0,0],
-    [0,0,0,0, 1,0,0,0, 0,0,0,0, 1,0,0,0],
-    [1,0,1,0, 1,0,1,0, 1,0,1,0, 1,0,1,1],
-    [1,0,0,1, 0,0,1,0, 0,1,0,0, 1,0,0,0]
+    [1,0,0,0, 0,0,0,1, 0,0,1,0, 0,0,0,0],
+    [0,0,0,0, 0,0,0,0, 1,0,0,0, 0,0,0,0],
+    [1,0,1,0, 1,0,1,0, 1,0,1,0, 1,1,1,1],
+    [1,0,0,1, 0,0,1,0, 1,0,1,1, 0,0,1,0]
   ];
   const grid = $('#seq-grid'); const btns = [];
   ROWS.forEach((row, r) => {
@@ -195,9 +195,11 @@
     }
   });
   let ctx, master, noiseBuf, bellBus;
-  // Drop your own one-shots here (e.g. { 0: 'sounds/kick.wav', 1: 'sounds/snare.wav', 2: 'sounds/hat.wav' }); synth is the fallback.
-  const SAMPLE_FILES = {};
-  const samples = {};
+  // Real one-shots for the drums (synth is only the fallback). Fetched early, decoded once audio starts.
+  const SAMPLE_FILES = { 0: 'sounds/kick.mp3', 1: 'sounds/snare.mp3', 2: 'sounds/hats.mp3' };
+  const samples = {}, raw = {};
+  Object.entries(SAMPLE_FILES).forEach(([r, url]) => { raw[r] = fetch(url).then(res => res.ok ? res.arrayBuffer() : Promise.reject()).catch(() => null); });
+  let lastKick = null, dl;
   const ensureCtx = () => {
     if (ctx) { if (ctx.state === 'suspended') ctx.resume(); return; }
     ctx = new (window.AudioContext || window.webkitAudioContext)();
@@ -209,18 +211,21 @@
     bellBus = ctx.createGain(); bellBus.gain.value = 1; bellBus.connect(master);
     const len = ctx.sampleRate * 3.2, ir = ctx.createBuffer(2, len, ctx.sampleRate);
     for (let c = 0; c < 2; c++) { const ch = ir.getChannelData(c); for (let i = 0; i < len; i++) ch[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 3.2); }
-    const verb = ctx.createConvolver(); verb.buffer = ir; const wet = ctx.createGain(); wet.gain.value = .55;
+    const verb = ctx.createConvolver(); verb.buffer = ir; const wet = ctx.createGain(); wet.gain.value = .4;
     bellBus.connect(verb); verb.connect(wet); wet.connect(master);
-    const dl = ctx.createDelay(1), fb = ctx.createGain(), dlf = ctx.createBiquadFilter(), dwet = ctx.createGain();
-    dl.delayTime.value = .36; fb.gain.value = .32; dlf.type = 'lowpass'; dlf.frequency.value = 2600; dwet.gain.value = .28;
+    dl = ctx.createDelay(1); const fb = ctx.createGain(), dlf = ctx.createBiquadFilter(), dwet = ctx.createGain();
+    dl.delayTime.value = 60 / bpm * .75; fb.gain.value = .3; dlf.type = 'lowpass'; dlf.frequency.value = 2600; dwet.gain.value = .28;
     bellBus.connect(dl); dl.connect(dlf); dlf.connect(fb); fb.connect(dl); dlf.connect(dwet); dwet.connect(verb); dwet.connect(master);
-    Object.entries(SAMPLE_FILES).forEach(([r, url]) => {
-      fetch(url).then(res => res.ok ? res.arrayBuffer() : Promise.reject()).then(b => ctx.decodeAudioData(b)).then(buf => { samples[r] = buf; }).catch(() => {});
-    });
+    Object.keys(raw).forEach(r => raw[r].then(b => b && ctx.decodeAudioData(b.slice(0))).then(buf => { if (buf) samples[r] = buf; }).catch(() => {}));
   };
-  const ARP = [440, 554.37, 659.25, 783.99, 880, 1108.73, 1318.51, 1567.98]; // A7: A C# E G, rising
+  // A minor / harmonic minor line, one note per step: E5 D5 C5 C5 B4 A4 A4 B4 B4 C5 C5 B4 A4 G#4 G#4 E4
+  const MEL = [76, 74, 72, 72, 71, 69, 69, 71, 71, 72, 72, 71, 69, 68, 68, 64].map(m => 440 * Math.pow(2, (m - 69) / 12));
   const voice = (r, t, s) => {
-    if (samples[r]) { const b = ctx.createBufferSource(); b.buffer = samples[r]; b.connect(master); b.start(t); return; }
+    if (samples[r]) {
+      const b = ctx.createBufferSource(), g = ctx.createGain(); b.buffer = samples[r]; g.gain.value = .9; b.connect(g); g.connect(master);
+      if (r === 0) { if (lastKick) { lastKick.gain.setTargetAtTime(0, t, .008); } lastKick = g; } // 808 choke
+      b.start(t); return;
+    }
     if (r === 0) { // kick
       const o = ctx.createOscillator(), g = ctx.createGain();
       o.frequency.setValueAtTime(150, t); o.frequency.exponentialRampToValueAtTime(42, t + .18);
@@ -233,23 +238,19 @@
       g.gain.setValueAtTime(r === 1 ? .7 : .35, t); g.gain.exponentialRampToValueAtTime(.001, t + len);
       n.connect(f); f.connect(g); g.connect(master); n.start(t); n.stop(t + len + .02);
       if (r === 1) { const o = ctx.createOscillator(), og = ctx.createGain(); o.type = 'triangle'; o.frequency.value = 190; og.gain.setValueAtTime(.35, t); og.gain.exponentialRampToValueAtTime(.001, t + .1); o.connect(og); og.connect(master); o.start(t); o.stop(t + .12); }
-    } else { // bells: glassy FM tone with a long tail, A7 arpeggio going up
-      let n = 0; for (let i = 0; i < s; i++) if (pattern[3][i]) n++;
-      const hz = ARP[n % ARP.length];
-      const out = ctx.createGain(); out.connect(bellBus);
-      out.gain.setValueAtTime(.0001, t); out.gain.exponentialRampToValueAtTime(.2, t + .006); out.gain.exponentialRampToValueAtTime(.0001, t + 3.2);
-      const car = ctx.createOscillator(), mod = ctx.createOscillator(), mg = ctx.createGain();
-      car.frequency.value = hz; mod.frequency.value = hz * 3.5;
-      mg.gain.setValueAtTime(hz * 2.2, t); mg.gain.exponentialRampToValueAtTime(hz * .05, t + 1.4);
-      mod.connect(mg); mg.connect(car.frequency); car.connect(out);
-      [[2.001, .1, 1.6], [4.07, .04, .5], [1.0015, .12, 3]].forEach(([m, v, d]) => {
-        const o = ctx.createOscillator(), g = ctx.createGain(); o.frequency.value = hz * m;
-        g.gain.setValueAtTime(v, t); g.gain.exponentialRampToValueAtTime(.0001, t + d); o.connect(g); g.connect(out); o.start(t); o.stop(t + d + .05);
+    } else { // melody: soft trap pluck, two detuned triangles + a sine an octave down, through the reverb/delay bus
+      const hz = MEL[s % MEL.length];
+      const out = ctx.createGain(), f = ctx.createBiquadFilter(); f.type = 'lowpass'; f.Q.value = .7;
+      f.frequency.setValueAtTime(3200, t); f.frequency.exponentialRampToValueAtTime(700, t + .5);
+      out.gain.setValueAtTime(.0001, t); out.gain.exponentialRampToValueAtTime(.16, t + .012); out.gain.exponentialRampToValueAtTime(.05, t + .25); out.gain.exponentialRampToValueAtTime(.0001, t + 1.3);
+      f.connect(out); out.connect(bellBus);
+      [[1, -6, 'triangle', .6], [1, 6, 'triangle', .6], [.5, 0, 'sine', .5]].forEach(([m, cents, type, v]) => {
+        const o = ctx.createOscillator(), g = ctx.createGain(); o.type = type; o.frequency.value = hz * m; o.detune.value = cents; g.gain.value = v;
+        o.connect(g); g.connect(f); o.start(t); o.stop(t + 1.4);
       });
-      car.start(t); mod.start(t); car.stop(t + 3.3); mod.stop(t + 3.3);
     }
   };
-  let bpm = 92, step = 0, nextT = 0, timer = null;
+  let bpm = 140, step = 0, nextT = 0, timer = null;
   const drawQueue = [];
   const schedule = () => {
     while (nextT < ctx.currentTime + .1) {
@@ -278,11 +279,11 @@
   });
   $('#seq-clear').addEventListener('click', () => { pattern.forEach((row, r) => row.forEach((_, s) => { row[s] = 0; btns[r][s].setAttribute('aria-pressed', 'false'); })); });
   $('#seq-rand').addEventListener('click', () => {
-    const p = [.35, .2, .6, .25];
-    pattern.forEach((row, r) => row.forEach((_, s) => { let v = Math.random() < p[r] ? 1 : 0; if (r === 0 && s % 8 === 0) v = 1; if (r === 1) v = (s % 8 === 4) ? 1 : (Math.random() < .08 ? 1 : 0); row[s] = v; btns[r][s].setAttribute('aria-pressed', v ? 'true' : 'false'); }));
+    const p = [.2, 0, .75, .4];
+    pattern.forEach((row, r) => row.forEach((_, s) => { let v = Math.random() < p[r] ? 1 : 0; if (r === 0 && s === 0) v = 1; if (r === 1) v = s === 8 ? 1 : (s > 8 && Math.random() < .06 ? 1 : 0); row[s] = v; btns[r][s].setAttribute('aria-pressed', v ? 'true' : 'false'); }));
   });
   const bpmIn = $('#seq-bpm'), bpmOut = $('#seq-bpm-out');
-  bpmIn.addEventListener('input', () => { bpm = +bpmIn.value; bpmOut.textContent = bpm; });
+  bpmIn.addEventListener('input', () => { bpm = +bpmIn.value; bpmOut.textContent = bpm; if (dl) dl.delayTime.setTargetAtTime(60 / bpm * .75, ctx.currentTime, .05); });
   document.addEventListener('visibilitychange', () => { if (document.hidden && seqPlaying) stop(); });
 
 
