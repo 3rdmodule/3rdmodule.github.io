@@ -128,11 +128,12 @@ BRANCH = ('<div class="branch-wrap" aria-hidden="true"><svg class="branch reveal
 
 NAV = [
   ("accueil", "Accueil", ""),
-  ("pratiques", "Mes pratiques", None),
-  ("seances", "Séances & tarifs", "seances-et-tarifs/"),
+  ("pratiques", "Mes soins", None),
+  ("quiz", "Quel soin pour moi ?", "quel-soin-pour-moi/"),
+  ("seances", "Tarifs", "seances-et-tarifs/"),
   ("parcours", "Mon parcours", "parcours/"),
   ("avis", "Avis", "avis/"),
-  ("rdv", "Infos pratiques", "rendez-vous/"),
+  ("rdv", "Contact", "rendez-vous/"),
 ]
 PRATIQUES = [
   ("naturopathie", "Naturopathie", "naturopathie/", "Alimentation, plantes, remèdes naturels"),
@@ -199,6 +200,7 @@ def footer():
     <div><h4>Mes pratiques</h4><ul>{prat}<li><a href="{B}seances-et-tarifs/">Séances & tarifs</a></li></ul></div>
     <div><h4>Découvrir</h4><ul>
       <li><a href="{B}parcours/">Mon parcours</a></li>
+      <li><a href="{B}quel-soin-pour-moi/">Quel soin pour moi ?</a></li>
       <li><a href="{B}avis/">Avis</a></li>
       <li><a href="{B}rendez-vous/">Rendez-vous & infos pratiques</a></li>
       <li><a href="{B}mentions-legales/">Mentions légales</a></li>
