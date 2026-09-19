@@ -1016,3 +1016,15 @@ body{background-image:none;background:var(--ivory)}
 .hero-v5 .ki-phone strong{font-size:28px;white-space:nowrap}
 .hero-v5 .ki-phone+.ki{border-left:0;padding-left:0}
 @media (max-width:960px){.hero-v5 .keyinfo{grid-template-columns:1fr}.hero-v5 .ki-phone{border-bottom:0}}
+/* V5.1 — finitions */
+.hm-bg{background:linear-gradient(135deg,var(--blush) 0%,var(--blush-deep) 60%,var(--sage) 100%)}
+.hours .auj{font-style:normal;font-size:13px;font-weight:600;background:var(--plum);color:#fff;border-radius:999px;padding:2px 9px;margin-left:6px;vertical-align:1px}
+.hours li.today{color:var(--ink)}
+.ki-phone span{font-size:15.5px}
+a.ki-phone{border-radius:10px;transition:background .3s}
+a.ki-phone:hover{background:var(--plum-soft)}
+@media (max-width:640px){
+  .hero-v5 .eyebrow{font-size:24px}
+  .hero-v5 .ki-phone strong{font-size:26px}
+  .hero-v5 .btn-row{gap:6px}
+}

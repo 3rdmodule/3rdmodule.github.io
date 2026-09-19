@@ -88,7 +88,7 @@
 
   /* Horaires : jour courant mis en avant */
   var today=(new Date().getDay()+6)%7;
-  d.querySelectorAll(".hours").forEach(function(ul){ var li=ul.children[today]; if(li) li.classList.add("today"); });
+  d.querySelectorAll(".hours").forEach(function(ul){ var li=ul.children[today]; if(li && !li.classList.contains("off")){ li.classList.add("today"); var t=li.firstElementChild; if(t) t.insertAdjacentHTML("beforeend",' <em class="auj">aujourd\'hui</em>'); } });
 
   /* Formulaire de contact : ouvre la messagerie avec le message pré-rempli */
   var form=d.getElementById("contact-form");
@@ -160,19 +160,19 @@
       plantes:["Plantes et hydrolats","Détox, drainage, détente du système nerveux","naturopathie/#plantes"],
       meta:["Biorésonance Métatron","Un bilan très précis pour trouver l'origine des troubles","bioresonance/#metatron"],
       life:["Biorésonance L.I.F.E","Un rééquilibrage ciblé, aussi à distance","bioresonance/#life"],
-      reflexo:["Réflexologie plantaire","Détente profonde, détox, harmonisation","reflexologies/#plantaire"],
+      reflexo:["Réflexologie plantaire","Détente profonde, libération des tensions, détox","reflexologies/#plantaire"],
       dien:["Dien Chan","Réflexologie faciale, pour les douleurs et gênes","reflexologies/#dien-chan"],
       beaute:["Chan Beauté","Soin visage vietnamien : relaxant, drainant, anti-rides","reflexologies/#chan-beaute"],
       amma:["Massage assis AMMA","Relâchement immédiat des tensions, en 20 min","massages/#amma"],
       visage:["Massage japonais du visage","Lifting naturel, éclat, détente","massages/#visage"]
     };
     var MAP={
-      stress:["stress","life","amma","bach","reflexo"], sommeil:["life","naturo","stress","reflexo"],
-      digestion:["nutri","meta","naturo","champi"], poids:["nutri","life","naturo"],
-      douleurs:["life","dien","reflexo","amma"], fatigue:["life","naturo","champi","reflexo"],
+      stress:["stress","life","amma","reflexo"], sommeil:["life","naturo"],
+      digestion:["nutri","life","naturo"], poids:["nutri","life","naturo"],
+      douleurs:["life","dien","amma"], fatigue:["life","naturo"],
       emotions:["bach","life","stress"], detox:["plantes","reflexo","life","nutri"],
       visage:["visage","beaute"], tensions:["amma","reflexo","visage"],
-      comprendre:["meta","naturo"], allergies:["life","naturo"]
+      comprendre:["meta","naturo"], allergies:["life"]
     };
     var chips=guide.querySelectorAll(".guide-chips button"), out=guide.querySelector(".guide-out");
     var empty=out.innerHTML;
@@ -183,7 +183,7 @@
       sel.forEach(function(n){ (MAP[n]||[]).forEach(function(k,i){ if(!(k in score)){ score[k]=0; order.push(k); } score[k]+= (4-i); }); });
       order.sort(function(a,b){ return score[b]-score[a]; });
       var html='<ul class="guide-list">'+order.slice(0,4).map(function(k,i){ var p=P[k]; return '<li style="--i:'+i+'"><a href="'+B+p[2]+'"><b>'+p[0]+'</b><span>'+p[1]+'</span></a></li>'; }).join("")+'</ul>'+
-        '<p class="guide-note">Ce ne sont que des pistes&nbsp;: lors de notre premier échange, gratuit, je vous oriente vers la séance la plus adaptée. Ces pratiques ne remplacent pas un avis médical.</p>';
+        '<p class="guide-note">Ce ne sont que des pistes&nbsp;: n'hésitez pas à m'appeler, le premier contact est gratuit. Ces pratiques ne remplacent pas un avis médical.</p>';
       out.innerHTML=html;
     }
     chips.forEach(function(c){ c.addEventListener("click",function(){ c.setAttribute("aria-pressed", c.getAttribute("aria-pressed")==="true"?"false":"true"); render(); }); });

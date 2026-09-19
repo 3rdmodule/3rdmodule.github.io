@@ -174,7 +174,7 @@ def header(active):
   <a class="brand" href="{B}" aria-label="Fabienne Hiot, naturopathe : accueil">{brand("Naturopathe · Biorésonance")}</a>
   <nav aria-label="Navigation principale"><ul class="menu">{"".join(items)}</ul></nav>
   <div class="nav-cta">
-    <a class="btn" href="{RESALIB}" target="_blank" rel="noopener">{icon("calendar")}Rendez-vous</a>
+    <a class="btn" href="{RESALIB}" target="_blank" rel="noopener" aria-describedby="nt">{icon("calendar")}Rendez-vous</a>
     <button class="burger" aria-expanded="false" aria-controls="mnav" aria-label="Ouvrir le menu"><span></span><span></span><span></span></button>
   </div>
 </div></header>
@@ -212,15 +212,15 @@ def footer():
 </div></footer>
 <nav class="actionbar" aria-label="Contact rapide">
   <a href="{TEL_HREF}">{icon("phone")}Appeler</a>
-  <a class="primary" href="{RESALIB}" target="_blank" rel="noopener">{icon("calendar")}Rendez-vous</a>
+  <a class="primary" href="{RESALIB}" target="_blank" rel="noopener" aria-describedby="nt">{icon("calendar")}Rendez-vous</a>
 </nav>'''
 
 CTA = f'''<section class="section tight"><div class="wrap">
 <div class="cta-band reveal">
   <div><p class="hand">À bientôt au cabinet,</p><h2>Augmentez votre vitalité, <em>baissez votre stress.</em></h2>
-  <p>Réservez votre séance en ligne sur Resalib ou appelez-moi : le premier échange téléphonique est gratuit (15 min maximum). Des séances individuelles, pour un bien-être sur mesure.</p></div>
+  <p>Réservez votre séance en ligne sur Resalib ou appelez-moi : le premier contact ou une information par téléphone est gratuit (15 min). Des séances individuelles, pour un bien-être sur mesure.</p></div>
   <div class="btn-row">
-    <a class="btn btn-light" href="{RESALIB}" target="_blank" rel="noopener">{icon("calendar")}Prendre rendez-vous</a>
+    <a class="btn btn-light" href="{RESALIB}" target="_blank" rel="noopener" aria-describedby="nt">{icon("calendar")}Prendre rendez-vous</a>
     <a class="btn btn-ghost" href="{TEL_HREF}">{icon("phone")}{TEL}</a>
   </div>
 </div></div></section>'''
@@ -264,6 +264,7 @@ def layout(meta, body):
 </head>
 <body>
 {header(active)}
+<span id="nt" hidden>S'ouvre dans un nouvel onglet</span>
 <main id="contenu">
 {body}
 </main>
