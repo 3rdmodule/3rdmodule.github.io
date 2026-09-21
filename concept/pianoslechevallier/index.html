@@ -6,7 +6,8 @@
     <meta name="robots" content="noindex, nofollow" />
     <meta name="description" content="Le Domaine Musical — pianos & lutherie Lechevallier à Saint-Lô. Concept de refonte réalisé par 3rdmodule." />
     <title>Le Domaine Musical · pianos & lutherie Lechevallier</title>
-    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="favicon.png" type="image/png" />
+    <link rel="apple-touch-icon" href="apple-touch-icon.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
@@ -16,10 +17,17 @@
       // retour d'un lien profond redirigé par la page 404 de GitHub Pages
       try { var r = sessionStorage.getItem('ldm-redirect'); if (r) { sessionStorage.removeItem('ldm-redirect'); history.replaceState(null, '', r) } } catch (e) {}
     </script>
-    <script type="module" crossorigin src="/concept/pianoslechevallier/assets/index-Pgm-lD-V.js"></script>
-    <link rel="stylesheet" crossorigin href="/concept/pianoslechevallier/assets/index-DhY81I8V.css">
+    <style>#boot{z-index:9999;background:#0b1020;place-items:center;transition:opacity .55s,visibility .55s;display:grid;position:fixed;inset:0}#boot.gone{opacity:0;visibility:hidden}#boot .b-in{justify-items:center;gap:18px;display:grid}#boot img{width:64px;animation:1.9s ease-in-out infinite bootPulse}#boot .b-n{color:#eef1f8;letter-spacing:.01em;font-family:Georgia,serif;font-size:22px}#boot .b-s{letter-spacing:.24em;text-transform:uppercase;color:#c3a464;margin-top:-10px;font:700 10.5px system-ui,sans-serif}#boot .b-bar{background:#c3a46440;width:148px;height:2px;overflow:hidden}#boot .b-bar i{background:#c3a464;width:40%;height:100%;animation:1.15s ease-in-out infinite bootBar;display:block}@keyframes bootBar{0%{transform:translate(-100%)}to{transform:translate(300%)}}@keyframes bootPulse{0%,to{opacity:.75;transform:scale(.98)}50%{opacity:1;transform:scale(1.02)}}@media (prefers-reduced-motion:reduce){#boot img,#boot .b-bar i{animation:none}}</style>
+    <script type="module" crossorigin src="/concept/pianoslechevallier/assets/index-D2Paou-2.js"></script>
+    <link rel="stylesheet" crossorigin href="/concept/pianoslechevallier/assets/index-B0IpRNx5.css">
   </head>
   <body>
+    <div id="boot" aria-hidden="true"><div class="b-in">
+      <img src="logo-piano.png" alt="" />
+      <div class="b-n">Le Domaine Musical</div>
+      <div class="b-s">pianos &amp; lutherie Lechevallier</div>
+      <div class="b-bar"><i></i></div>
+    </div></div>
     <div id="root"></div>
   </body>
 </html>
