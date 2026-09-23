@@ -348,3 +348,20 @@
   steps.forEach(function(s,k){ s.hidden=k!==0; });
   show(0);
 })();
+
+/* ===== Réservation en ligne (agenda Cal.com, chargé au clic) ===== */
+(function(){
+  "use strict";
+  var box=document.querySelector(".booking"); if(!box) return;
+  var user=box.getAttribute("data-cal-user"), panel=box.querySelector(".book-panel");
+  var empty=panel.innerHTML, btns=box.querySelectorAll(".book-list button");
+  btns.forEach(function(b){
+    b.addEventListener("click",function(){
+      btns.forEach(function(x){ x.setAttribute("aria-pressed", x===b?"true":"false"); });
+      var slug=b.getAttribute("data-slug"), label=b.querySelector("b").textContent;
+      var url="https://cal.com/"+user+"/"+slug+"?embed=true&layout=month_view";
+      panel.innerHTML='<div class="book-head"><strong>'+label+'</strong><a href="'+url.replace("&embed=true","")+'" target="_blank" rel="noopener">Ouvrir dans une nouvelle fenêtre</a></div><iframe title="Agenda de réservation : '+label+'" src="'+url+'" loading="lazy"></iframe>';
+      if(window.innerWidth<960) panel.scrollIntoView({behavior:"smooth",block:"start"});
+    });
+  });
+})();

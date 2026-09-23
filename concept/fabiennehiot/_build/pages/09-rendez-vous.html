@@ -18,18 +18,54 @@ og: cabinet-soin-large
       <div class="card reveal" style="background:var(--plum);border-color:var(--plum);color:#FFFFFF">
         <div class="card-ic" style="background:rgba(255,255,255,.14);color:#fff">{{ic:calendar}}</div>
         <h2 style="color:#fff;font-size:30px">En ligne</h2>
-        <p>Choisissez votre séance et votre créneau sur Resalib.</p>
-        <a class="btn btn-light" href="{{RESALIB}}" target="_blank" rel="noopener" aria-describedby="nt">Réserver sur Resalib</a>
+        <p>Choisissez votre soin et votre créneau, juste en dessous. Vous recevez la confirmation par e-mail.</p>
+        <a class="btn btn-light" href="#reserver">Voir les créneaux</a>
       </div>
       <div class="card reveal d1">
         <div class="card-ic">{{ic:phone}}</div>
         <h2 style="font-size:30px">Par téléphone</h2>
-        <p style="margin-bottom:4px">Du lundi au vendredi, de 14 h à 18 h. Prise de rendez-vous possible hors Resalib.</p>
+        <p style="margin-bottom:4px">Du lundi au vendredi, de 14 h à 18 h.</p>
         <a class="big-phone" href="{{TEL_HREF}}">{{TEL}}</a>
       </div>
     </div>
   </div>
 </section>
+
+<section class="section tight" id="reserver">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow reveal">Réserver en ligne</p>
+      <h2 class="split-in">Choisissez votre soin</h2>
+      <p class="lead reveal d2">Sélectionnez un soin&nbsp;: mon agenda s'affiche avec mes disponibilités, et vous choisissez votre créneau. Les horaires proposés tiennent compte de la durée de la séance.</p>
+    </div>
+    <div class="booking" data-cal-user="{{CAL_USER}}">
+      <ul class="book-list">
+        <li><button type="button" data-slug="naturopathie-premiere-seance"><b>Naturopathie · première séance</b><span>1 h 30 · 80 €</span></button></li>
+        <li><button type="button" data-slug="naturopathie-suivi"><b>Naturopathie · suivi ou coaching alimentaire</b><span>1 h · 65 €</span></button></li>
+        <li><button type="button" data-slug="naturopathie-enfant"><b>Naturopathie · enfant dès 7 ans</b><span>50 min · 40 €</span></button></li>
+        <li><button type="button" data-slug="naturopathie-bioenergetique"><b>Naturopathie bioénergétique · première séance</b><span>1 h 45 · 80 €</span></button></li>
+        <li><button type="button" data-slug="bioresonance-metatron"><b>Biorésonance Métatron · première séance</b><span>1 h 30 · 80 €</span></button></li>
+        <li><button type="button" data-slug="bioresonance-life"><b>Biorésonance L.I.F.E · une séance</b><span>1 h · 65 €</span></button></li>
+        <li><button type="button" data-slug="bioresonance-a-distance"><b>Biorésonance à distance</b><span>1 h 30 · 60 €</span></button></li>
+        <li><button type="button" data-slug="reflexologie-plantaire"><b>Réflexologie plantaire</b><span>45 min · 50 €</span></button></li>
+        <li><button type="button" data-slug="dien-chan"><b>Dien Chan, réflexologie faciale</b><span>45 min · 50 €</span></button></li>
+        <li><button type="button" data-slug="chan-beaute"><b>Soin visage vietnamien Chan Beauté</b><span>30 min · 35 €</span></button></li>
+        <li><button type="button" data-slug="massage-amma"><b>Massage assis AMMA</b><span>20 min + 10 min · 30 €</span></button></li>
+        <li><button type="button" data-slug="massage-visage-30"><b>Massage visage japonais</b><span>30 min</span></button></li>
+        <li><button type="button" data-slug="massage-visage-50"><b>Massage visage japonais</b><span>50 min</span></button></li>
+      </ul>
+      <div class="book-panel">
+        <div class="book-empty">
+          {{ic:calendar}}
+          <p><strong>Sélectionnez un soin</strong> pour voir mes disponibilités.</p>
+          <p class="book-note">L'agenda est fourni par Cal.com. Il ne se charge que si vous cliquez, et vos informations ne servent qu'à votre rendez-vous.</p>
+        </div>
+      </div>
+    </div>
+    <p class="book-fallback reveal">Un souci pour réserver en ligne&nbsp;? Appelez-moi au <a href="{{TEL_HREF}}"><strong>{{TEL}}</strong></a>, du lundi au vendredi de 14 h à 18 h.</p>
+  </div>
+</section>
+
 
 <section class="section tight bg-paper">
   <div class="wrap">

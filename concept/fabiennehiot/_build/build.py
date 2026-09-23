@@ -17,6 +17,10 @@ TEL = "06 42 44 25 50"
 TEL_HREF = "tel:+33642442550"
 EMAIL = "fabienne.hiot@gmail.com"
 RESALIB = "https://www.resalib.fr/praticien/46854-fabienne-hiot-naturopathe-saint-raphael"
+# Réservation en ligne : compte Cal.com de Fabienne (à créer par elle).
+# Il suffit de changer CAL_USER si le nom d'utilisateur diffère, puis de relancer build.py.
+CAL_USER = "fabienne-hiot"
+BOOK = B + "rendez-vous/#reserver"   # page de réservation du site
 MAPS_EMBED = "https://maps.google.com/maps?q=Les%20Mas%20de%20l%27Esterel%2C%20Boulevard%20de%20l%27Esterel%2C%2083530%20Agay&z=14&output=embed"
 MAPS_LINK = "https://maps.google.com/maps?q=Les%20Mas%20de%20l%27Esterel%2C%20Boulevard%20de%20l%27Esterel%2C%2083530%20Agay"
 FONTS = "https://fonts.bunny.net/css?family=fraunces:400,400i,500,500i|figtree:400,500,600,700|parisienne:400&display=swap"
@@ -175,7 +179,7 @@ def header(active):
   <a class="brand" href="{B}" aria-label="Fabienne Hiot, naturopathe : accueil">{brand("Naturopathe · Biorésonance")}</a>
   <nav aria-label="Navigation principale"><ul class="menu">{"".join(items)}</ul></nav>
   <div class="nav-cta">
-    <a class="btn" href="{RESALIB}" target="_blank" rel="noopener" aria-describedby="nt">{icon("calendar")}Rendez-vous</a>
+    <a class="btn" href="{BOOK}">{icon("calendar")}Rendez-vous</a>
     <button class="burger" aria-expanded="false" aria-controls="mnav" aria-label="Ouvrir le menu"><span></span><span></span><span></span></button>
   </div>
 </div></header>
@@ -214,15 +218,15 @@ def footer():
 </div></footer>
 <nav class="actionbar" aria-label="Contact rapide">
   <a href="{TEL_HREF}">{icon("phone")}Appeler</a>
-  <a class="primary" href="{RESALIB}" target="_blank" rel="noopener" aria-describedby="nt">{icon("calendar")}Rendez-vous</a>
+  <a class="primary" href="{BOOK}">{icon("calendar")}Rendez-vous</a>
 </nav>'''
 
 CTA = f'''<section class="section tight"><div class="wrap">
 <div class="cta-band reveal">
   <div><p class="hand">À bientôt au cabinet,</p><h2>Augmentez votre vitalité, <em>baissez votre stress.</em></h2>
-  <p>Réservez votre séance en ligne sur Resalib ou appelez-moi : le premier contact ou une information par téléphone est gratuit (15 min). Des séances individuelles, pour un bien-être sur mesure.</p></div>
+  <p>Réservez votre séance en ligne ou appelez-moi : le premier contact ou une information par téléphone est gratuit (15 min). Des séances individuelles, pour un bien-être sur mesure.</p></div>
   <div class="btn-row">
-    <a class="btn btn-light" href="{RESALIB}" target="_blank" rel="noopener" aria-describedby="nt">{icon("calendar")}Prendre rendez-vous</a>
+    <a class="btn btn-light" href="{BOOK}">{icon("calendar")}Prendre rendez-vous</a>
     <a class="btn btn-ghost" href="{TEL_HREF}">{icon("phone")}{TEL}</a>
   </div>
 </div></div></section>'''
@@ -284,7 +288,7 @@ def crumbs(items):
     return f'<nav aria-label="Fil d’Ariane"><ol class="crumbs">{"".join(lis)}</ol></nav>'
 
 def render(text):
-    text = text.replace("{{CTA}}", CTA).replace("{{AMMA}}", AMMA).replace("{{TREE}}", TREE).replace("{{BRANCH}}", BRANCH)
+    text = text.replace("{{CTA}}", CTA).replace("{{AMMA}}", AMMA).replace("{{TREE}}", TREE).replace("{{BRANCH}}", BRANCH).replace("{{CAL_USER}}", CAL_USER).replace("{{BOOK}}", BOOK)
     text = re.sub(r"\{\{I:([a-z0-9_]+):?(\d+)?\}\}", lambda m: img(m.group(1), m.group(2) or "1200"), text)
     text = re.sub(r"\{\{L:([a-z0-9-]+)(?::(jpg))?\}\}", lambda m: B + "assets/img/" + m.group(1) + "." + (m.group(2) or "webp"), text)
     text = re.sub(r"\{\{ic:([a-z]+)\}\}", lambda m: icon(m.group(1)), text)
