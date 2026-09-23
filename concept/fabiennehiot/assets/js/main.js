@@ -273,82 +273,6 @@
   targets.forEach(function(t){ io.observe(t); });
 })();
 
-/* ===== Questionnaire « Quel soin pour moi ? » =====
-   Les correspondances besoin → soin reprennent uniquement ce que Fabienne écrit sur chaque soin. */
-(function(){
-  "use strict";
-  var quiz=document.getElementById("quiz"); if(!quiz) return;
-  var B=quiz.getAttribute("data-base");
-  var SOINS={
-    naturo:{n:"Naturopathie",d:"Un bilan par l'observation et le questionnement, puis des conseils d'hygiène de vie et d'alimentation, avec l'aide des plantes, bourgeons, hydrolats, fleurs de Bach et champignons.",m:"1re séance 1 h 30 · 80 € · suivi 65 € · enfant 40 €",u:"naturopathie/"},
-    bio:{n:"Biorésonance",d:"Bilan et harmonisation énergétique : analyse des déséquilibres avec le Métatron Hospital, rééquilibrage des troubles identifiés par vibrations ciblées avec le L.I.F.E.",m:"1 h à 1 h 30 · 1re séance 80 € · suivi 65 € · enfant 40 €",u:"bioresonance/"},
-    reflexo:{n:"Réflexologie plantaire",d:"Moderne, douce et équilibrante : détente profonde du corps et de l'esprit, libération des tensions, soin réflexe complet.",m:"45 min · 50 €",u:"reflexologies/#plantaire"},
-    dien:{n:"Dien Chan, réflexologie faciale",d:"Une technique multiréflexe vietnamienne qui agit rapidement dans la prise en charge de douleurs ou de gênes.",m:"30 min · 35 €, ou 45 min · 50 €",u:"reflexologies/#dien-chan"},
-    beaute:{n:"Soin visage vietnamien Chan Beauté",d:"Avec outils traditionnels Yin & Yang et acupressions : relaxant, drainant, anti-rides.",m:"30 min · 35 €",u:"reflexologies/#chan-beaute"},
-    amma:{n:"Massage assis AMMA",d:"Relâchement immédiat des tensions : dos, cou, épaules, tête, bras, mains.",m:"20 min · 30 €",u:"massages/#amma"},
-    visage:{n:"Massage visage japonais",d:"Kobido, shiatsu et reiki : lifting naturel, éclat, détente. Il soulage aussi les tensions du cou, de la nuque et de la mâchoire.",m:"30 ou 50 min, au choix",u:"massages/#visage"}
-  };
-  var BESOINS={
-    stress:{naturo:2,bio:2,amma:2,reflexo:2}, sommeil:{bio:3,naturo:2}, fatigue:{bio:3,naturo:2},
-    digestion:{naturo:3,bio:2}, poids:{naturo:3,bio:2}, douleurs:{dien:3,bio:2,amma:1},
-    emotions:{naturo:2,bio:2}, detox:{naturo:2,reflexo:2,bio:1}, allergies:{bio:3}, memoire:{bio:3},
-    tensions:{amma:3,visage:2,reflexo:1}, visage:{visage:3,beaute:3}
-  };
-  var ATTENTE={comprendre:{bio:3,naturo:2},habitudes:{naturo:4},detente:{reflexo:2,amma:2,visage:2,beaute:1},energie:{bio:3}};
-  var ORDER=["naturo","bio","reflexo","dien","beaute","amma","visage"];
-  var steps=[].slice.call(quiz.querySelectorAll(".q")), cur=0;
-  var prev=quiz.querySelector(".q-prev"), next=quiz.querySelector(".q-next"), bar=quiz.querySelector(".quiz-bar span"), count=quiz.querySelector(".quiz-count b");
-  var result=quiz.querySelector(".q-result"), nav=quiz.querySelector(".quiz-nav"), top=quiz.querySelector(".quiz-top");
-  function answered(i){ return !!steps[i].querySelector("input:checked"); }
-  function show(i){
-    steps.forEach(function(s,k){ s.classList.toggle("active",k===i); s.hidden=k!==i; });
-    cur=i; count.textContent=i+1; bar.style.width=((i)/steps.length*100)+"%";
-    prev.hidden=i===0; next.disabled=!answered(i);
-    next.firstChild.textContent=i===steps.length-1?"Voir mon résultat":"Suivant";
-    var lg=steps[i].querySelector("legend"); if(lg){ lg.setAttribute("tabindex","-1"); lg.focus({preventScroll:true}); }
-  }
-  quiz.addEventListener("change",function(e){
-    next.disabled=!answered(cur);
-    if(e.target.type==="radio" && cur<steps.length-1){ setTimeout(function(){ show(cur+1); },350); }
-  });
-  next.addEventListener("click",function(){ if(!answered(cur)) return; if(cur<steps.length-1) show(cur+1); else finish(); });
-  prev.addEventListener("click",function(){ if(cur>0) show(cur-1); });
-  function val(n){ var c=quiz.querySelector('input[name="'+n+'"]:checked'); return c?c.value:null; }
-  function finish(){
-    var sc={}; ORDER.forEach(function(k){ sc[k]=0; });
-    [].forEach.call(quiz.querySelectorAll('input[name="besoins"]:checked'),function(c){ var t=BESOINS[c.value]||{}; for(var k in t) sc[k]+=t[k]; });
-    var a=ATTENTE[val("attente")]||{}; for(var k in a) sc[k]+=a[k];
-    var allowed=ORDER.slice();
-    if(val("lieu")==="distance") allowed=["naturo","bio"];
-    if(val("pour")==="enfant") allowed=allowed.filter(function(k){ return k==="naturo"||k==="bio"; });
-    if(val("ci")==="oui") allowed=allowed.filter(function(k){ return k!=="bio"; });
-    if(!allowed.length) allowed=["naturo"];
-    var ranked=allowed.slice().sort(function(x,y){ return (sc[y]-sc[x]) || (ORDER.indexOf(x)-ORDER.indexOf(y)); });
-    var best=SOINS[ranked[0]];
-    result.querySelector(".res-name").textContent=best.n;
-    result.querySelector(".res-desc").textContent=best.d;
-    var meta=best.m;
-    if(ranked[0]==="bio" && val("lieu")==="distance") meta="À distance avec le L.I.F.E : 1 h 30 · 60 € (+ 5 € le flacon informé) · enfant 40 €";
-    if(ranked[0]==="naturo" && val("lieu")==="distance") meta=best.m+" · conseils et suivi possibles par Skype";
-    result.querySelector(".res-meta").textContent=meta;
-    result.querySelector(".res-link").href=B+best.u;
-    var also=ranked.slice(1).filter(function(k){ return sc[k]>0; }).slice(0,2);
-    var el=result.querySelector(".res-also");
-    el.innerHTML=also.length?("Également possible&nbsp;: "+also.map(function(k){ return '<a href="'+B+SOINS[k].u+'">'+SOINS[k].n+'</a>'; }).join(" · ")):"";
-    steps.forEach(function(s){ s.hidden=true; s.classList.remove("active"); });
-    nav.hidden=true; top.hidden=true; bar.style.width="100%";
-    result.hidden=false; result.classList.remove("show"); void result.offsetWidth; result.classList.add("show");
-    result.focus({preventScroll:true});
-    quiz.scrollIntoView({behavior:"smooth",block:"start"});
-  }
-  quiz.querySelector(".res-restart").addEventListener("click",function(){
-    quiz.querySelector("form").reset(); result.hidden=true; nav.hidden=false; top.hidden=false; show(0);
-    quiz.scrollIntoView({behavior:"smooth",block:"start"});
-  });
-  steps.forEach(function(s,k){ s.hidden=k!==0; });
-  show(0);
-})();
-
 /* ===== Réservation en ligne (agenda Cal.com, chargé au clic) ===== */
 (function(){
   "use strict";
@@ -362,6 +286,43 @@
       var url="https://cal.com/"+user+"/"+slug+"?embed=true&layout=month_view";
       panel.innerHTML='<div class="book-head"><strong>'+label+'</strong><a href="'+url.replace("&embed=true","")+'" target="_blank" rel="noopener">Ouvrir dans une nouvelle fenêtre</a></div><iframe title="Agenda de réservation : '+label+'" src="'+url+'" loading="lazy"></iframe>';
       if(window.innerWidth<960) panel.scrollIntoView({behavior:"smooth",block:"start"});
+    });
+  });
+})();
+
+/* ===== Bande vidéo du cabinet : chargée au défilement, muette, en boucle ===== */
+(function(){
+  "use strict";
+  var bands=[].slice.call(document.querySelectorAll(".vidband"));
+  if(!bands.length) return;
+  var reduce=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var conn=navigator.connection||navigator.mozConnection||navigator.webkitConnection;
+  var save=conn&&(conn.saveData||/2g/.test(conn.effectiveType||""));
+  if(reduce||save) return;                     /* on garde l'image fixe */
+  if(!("IntersectionObserver" in window)) return;
+  var io=new IntersectionObserver(function(es){
+    es.forEach(function(e){
+      var band=e.target, v=band.querySelector("video");
+      if(!v) return;
+      if(e.isIntersecting){
+        if(!band.dataset.loaded){
+          band.dataset.loaded="1";
+          [].forEach.call(v.querySelectorAll("source"),function(sc){ sc.src=sc.getAttribute("data-src"); });
+          v.addEventListener("playing",function(){ v.classList.add("on"); },{once:true});
+          v.load();
+        }
+        if(!band.dataset.paused) v.play().catch(function(){});
+      } else if(!v.paused){ v.pause(); }
+    });
+  },{threshold:.15});
+  bands.forEach(function(band){
+    var v=band.querySelector("video"), btn=band.querySelector(".vid-toggle");
+    io.observe(band);
+    if(!btn||!v) return;
+    btn.hidden=false;
+    btn.addEventListener("click",function(){
+      if(v.paused){ band.dataset.paused=""; delete band.dataset.paused; v.play().catch(function(){}); btn.setAttribute("aria-pressed","false"); btn.setAttribute("aria-label","Mettre la vidéo en pause"); }
+      else { band.dataset.paused="1"; v.pause(); btn.setAttribute("aria-pressed","true"); btn.setAttribute("aria-label","Relancer la vidéo"); }
     });
   });
 })();

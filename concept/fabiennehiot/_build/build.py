@@ -17,6 +17,8 @@ TEL = "06 42 44 25 50"
 TEL_HREF = "tel:+33642442550"
 EMAIL = "fabienne.hiot@gmail.com"
 RESALIB = "https://www.resalib.fr/praticien/46854-fabienne-hiot-naturopathe-saint-raphael"
+# Fiche Google de Fabienne (5,0 sur 14 avis, verifiee le 23/09/2026)
+GOOGLE = "https://www.google.com/maps?cid=6542139526107593497"
 # Réservation en ligne : compte Cal.com de Fabienne (à créer par elle).
 # Il suffit de changer CAL_USER si le nom d'utilisateur diffère, puis de relancer build.py.
 CAL_USER = "fabienne-hiot"
@@ -106,6 +108,8 @@ ICONS = {
  "moon":'<path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/>',
  "globe":'<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.3 3 14.7 0 18M12 3c-3 3.3-3 14.7 0 18"/>',
  "quote":'<path d="M9 7H5v6h4v4H5M19 7h-4v6h4v4h-4"/>',
+ "brain":'<path d="M9 18.5h6M10.5 21.5h3"/><path d="M12 2.5a6.5 6.5 0 0 0-3.8 11.8c.6.4.9 1.1.9 1.8v.4h5.8v-.4c0-.7.3-1.4.9-1.8A6.5 6.5 0 0 0 12 2.5z"/>',
+ "scale":'<rect x="3" y="4" width="18" height="16" rx="4.5"/><path d="M12 12.5l3.6-4.1"/><circle cx="12" cy="12.6" r="1.1"/><path d="M6.5 16.5h11"/>',
  "bowl":'<path d="M3 11h18a9 9 0 0 1-18 0zM8 7c0-2 2-2 2-4M13 7c0-2 2-2 2-4"/>',
 }
 def icon(name, cls=""):
@@ -133,7 +137,7 @@ BRANCH = ('<div class="branch-wrap" aria-hidden="true"><svg class="branch reveal
 NAV = [
   ("accueil", "Accueil", ""),
   ("pratiques", "Mes soins", None),
-  ("quiz", "Quel soin pour moi ?", "quel-soin-pour-moi/"),
+  ("pourquoi", "Pourquoi consulter&nbsp;?", "pourquoi-consulter/"),
   ("seances", "Tarifs", "seances-et-tarifs/"),
   ("parcours", "Mon parcours", "parcours/"),
   ("avis", "Avis", "avis/"),
@@ -204,7 +208,7 @@ def footer():
     <div><h4>Mes pratiques</h4><ul>{prat}<li><a href="{B}seances-et-tarifs/">Séances & tarifs</a></li></ul></div>
     <div><h4>Découvrir</h4><ul>
       <li><a href="{B}parcours/">Mon parcours</a></li>
-      <li><a href="{B}quel-soin-pour-moi/">Quel soin pour moi ?</a></li>
+      <li><a href="{B}pourquoi-consulter/">Pourquoi consulter&nbsp;?</a></li>
       <li><a href="{B}avis/">Avis</a></li>
       <li><a href="{B}rendez-vous/">Rendez-vous & infos pratiques</a></li>
       <li><a href="{B}mentions-legales/">Mentions légales</a></li>
@@ -237,15 +241,31 @@ JSONLD = {
   "address": {"@type": "PostalAddress", "streetAddress": "Les Mas de l'Esterel, Boulevard de l'Esterel, Agay",
               "postalCode": "83530", "addressLocality": "Saint-Raphaël", "addressCountry": "FR"},
   "openingHours": "Mo-Fr 14:00-18:00",
-  "aggregateRating": {"@type": "AggregateRating", "ratingValue": "5", "reviewCount": "31"},
+  "openingHoursSpecification": [{"@type": "OpeningHoursSpecification",
+    "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday"], "opens": "14:00", "closes": "18:00"}],
+  "sameAs": [GOOGLE, RESALIB],
+  "hasMap": GOOGLE,
   "url": SITE,
 }
+
+def plain(frag):
+    """Texte brut d'un fragment HTML, pour les donnees structurees."""
+    t = re.sub(r"<[^>]+>", " ", frag)
+    t = html.unescape(t).replace("\u00a0", " ")
+    return re.sub(r"\s+", " ", t).strip()
 
 def layout(meta, body):
     title = meta["title"]; desc = meta["description"]; active = meta.get("nav", "")
     canon = SITE + meta["path"]
     og = SITE + "assets/img/" + meta.get("og", "cabinet-soin-large") + ".jpg"
     jsonld = f'<script type="application/ld+json">{json.dumps(JSONLD, ensure_ascii=False)}</script>' if meta["path"] == "" else ""
+    # Donnees structurees FAQ : construites a partir des <details> reellement presents sur la page
+    qa = re.findall(r'<details><summary>(.*?)<span class="pm">.*?<div class="acc-body">(.*?)</div></details>', body, re.S)
+    if qa:
+        faq = {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [
+            {"@type": "Question", "name": plain(q),
+             "acceptedAnswer": {"@type": "Answer", "text": plain(a)}} for q, a in qa]}
+        jsonld += f'<script type="application/ld+json">{json.dumps(faq, ensure_ascii=False)}</script>' 
     return f'''<!doctype html>
 <html lang="fr" class="no-js">
 <head>
@@ -280,6 +300,21 @@ def layout(meta, body):
 </html>
 '''
 
+def videoband(cls, eyebrow, titre):
+    """Bande video du cabinet : muette, en boucle, chargee au defilement, avec bouton pause."""
+    return (f'<section class="vidband {cls} reveal" aria-label="Le cabinet en video">'
+      f'<img class="vid-poster" src="{B}assets/img/cabinet-poster.jpg" width="1280" height="720" loading="lazy" '
+      f'alt="La salle de soin du cabinet d\'Agay, paravent en bois sculpte et table de massage">'
+      f'<video poster="{B}assets/img/cabinet-poster.jpg" muted loop playsinline preload="none" aria-hidden="true" tabindex="-1">'
+      f'<source data-src="{B}assets/video/cabinet.mp4" type="video/mp4">'
+      f'<source data-src="{B}assets/video/cabinet.webm" type="video/webm">'
+      f'</video>'
+      f'<div class="vidband-cap"><p class="eyebrow">{eyebrow}</p><strong>{titre}</strong></div>'
+      f'<button type="button" class="vid-toggle" aria-pressed="false" aria-label="Mettre la video en pause" hidden>'
+      f'<svg class="i-pause" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M9 5v14M15 5v14"/></svg>'
+      f'<svg class="i-play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg>'
+      f'</button></section>')
+
 def crumbs(items):
     lis = [f'<li><a href="{B}">Accueil</a></li>']
     for label, path in items[:-1]:
@@ -293,8 +328,9 @@ def render(text):
     text = re.sub(r"\{\{L:([a-z0-9-]+)(?::(jpg))?\}\}", lambda m: B + "assets/img/" + m.group(1) + "." + (m.group(2) or "webp"), text)
     text = re.sub(r"\{\{ic:([a-z]+)\}\}", lambda m: icon(m.group(1)), text)
     text = re.sub(r"\{\{CRUMBS:(.+?)\}\}", lambda m: crumbs([tuple(x.split("|")) for x in m.group(1).split(";")]), text)
+    text = re.sub(r"\{\{VIDEO:(.*?)\|(.*?)\|(.*?)\}\}", lambda m: videoband(m.group(1), m.group(2), m.group(3)), text)
     text = re.sub(r"\{\{MORE:(.+?)\}\}", lambda m: f'<button class="more-btn" type="button" aria-expanded="false"><span>{m.group(1)}</span>{icon("chev")}</button>', text)
-    return (text.replace("{{B}}", B).replace("{{RESALIB}}", RESALIB).replace("{{TEL}}", TEL)
+    return (text.replace("{{B}}", B).replace("{{RESALIB}}", RESALIB).replace("{{GOOGLE}}", GOOGLE).replace("{{TEL}}", TEL)
                 .replace("{{TEL_HREF}}", TEL_HREF).replace("{{EMAIL}}", EMAIL)
                 .replace("{{MAPS_EMBED}}", MAPS_EMBED).replace("{{MAPS_LINK}}", MAPS_LINK))
 
