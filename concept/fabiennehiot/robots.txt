@@ -1,0 +1,7 @@
+# Version concept : site non indexable.
+# En production sur le domaine de Fabienne, remplacer par :
+#   User-agent: *
+#   Allow: /
+#   Sitemap: https://www.fabienne-hiot.fr/sitemap.xml
+User-agent: *
+Disallow: /

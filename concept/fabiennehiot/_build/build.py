@@ -6,7 +6,7 @@ Chaque fichier de pages/ commence par un en-tête « clé: valeur » puis une li
 Balises disponibles dans les pages : {{B}} (chemin de base), {{I:clé:largeur}} (URL d'image),
 {{ic:nom}} (icône SVG), {{CTA}} (bandeau de prise de rendez-vous), {{RESALIB}}, {{TEL}}, {{TEL_HREF}}.
 """
-import os, re, json, html
+import os, re, json, html, datetime
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.dirname(HERE)
@@ -21,7 +21,7 @@ RESALIB = "https://www.resalib.fr/praticien/46854-fabienne-hiot-naturopathe-sain
 GOOGLE = "https://www.google.com/maps?cid=6542139526107593497"
 # Réservation en ligne : compte Cal.com de Fabienne (à créer par elle).
 # Il suffit de changer CAL_USER si le nom d'utilisateur diffère, puis de relancer build.py.
-CAL_USER = "fabienne-hiot"
+CAL_USER = "hiot-fabienne"
 BOOK = B + "rendez-vous/#reserver"   # page de réservation du site
 MAPS_EMBED = "https://maps.google.com/maps?q=Les%20Mas%20de%20l%27Esterel%2C%20Boulevard%20de%20l%27Esterel%2C%2083530%20Agay&z=14&output=embed"
 MAPS_LINK = "https://maps.google.com/maps?q=Les%20Mas%20de%20l%27Esterel%2C%20Boulevard%20de%20l%27Esterel%2C%2083530%20Agay"
@@ -75,7 +75,13 @@ IMG = {
   "dip_dienchan1": "1781972114/10010009/{w}/1000032294.jpeg",
   "dip_dienchan2": "1781972114/10010007/{w}/1000032296.jpeg",
 }
+# Les photos non fournies par l'utilisateur sont encore servies par le CDN de Simplebo.
+# Passer LOCAL_IMG a True une fois les 26 fichiers telecharges dans assets/img/cdn/
+# (script _build/telecharger-images.ps1), pour ne plus dependre de Simplebo.
+LOCAL_IMG = False
 def img(key, w="1200"):
+    if LOCAL_IMG:
+        return B + "assets/img/cdn/" + key + ".jpg"
     return CDN + IMG[key].format(w=w)
 
 ICONS = {
@@ -281,7 +287,15 @@ def layout(meta, body):
 <meta property="og:description" content="{html.escape(desc)}">
 <meta property="og:image" content="{og}">
 <meta name="theme-color" content="#FBF7F3">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{html.escape(title)}">
+<meta name="twitter:description" content="{html.escape(desc)}">
+<meta name="twitter:image" content="{og}">
 <link rel="icon" href="{B}assets/img/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="{B}assets/img/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="{B}assets/img/favicon-16.png" sizes="16x16" type="image/png">
+<link rel="apple-touch-icon" href="{B}assets/img/apple-touch-icon.png">
+<link rel="manifest" href="{B}site.webmanifest">
 <link rel="preconnect" href="https://fonts.bunny.net">
 <link rel="preconnect" href="https://files.sbcdnsb.com">
 <link rel="stylesheet" href="{FONTS}">
@@ -334,8 +348,54 @@ def render(text):
                 .replace("{{TEL_HREF}}", TEL_HREF).replace("{{EMAIL}}", EMAIL)
                 .replace("{{MAPS_EMBED}}", MAPS_EMBED).replace("{{MAPS_LINK}}", MAPS_LINK))
 
+MANIFEST = {
+  "name": "Fabienne Hiot, naturopathe", "short_name": "Fabienne Hiot",
+  "start_url": B, "scope": B, "display": "browser",
+  "background_color": "#F7FAF3", "theme_color": "#44704F",
+  "icons": [{"src": B + "assets/img/icon-192.png", "sizes": "192x192", "type": "image/png"},
+            {"src": B + "assets/img/icon-512.png", "sizes": "512x512", "type": "image/png"}],
+}
+
+PAGE404 = '''<section class="page-hero"><div class="wrap">
+  <p class="eyebrow">Erreur 404</p>
+  <h1 class="split-in">Cette page n\u2019existe <em>pas ou plus</em></h1>
+  <p class="lead">Elle a peut-\u00eatre chang\u00e9 d\u2019adresse, ou le lien qui vous a amen\u00e9 ici comporte une faute.
+  Voici par o\u00f9 reprendre&nbsp;:</p>
+  <div class="btn-row" style="margin-top:26px">
+    <a class="btn" href="{B}">Retour \u00e0 l\u2019accueil</a>
+    <a class="btn btn-ghost" href="{B}seances-et-tarifs/">S\u00e9ances &amp; tarifs</a>
+    <a class="btn btn-ghost" href="{B}rendez-vous/">Prendre rendez-vous</a>
+  </div>
+  <p style="margin-top:30px">Ou appelez-moi directement au <a href="{TEL_HREF}"><strong>{TEL}</strong></a>,
+  du lundi au vendredi de 14&nbsp;h \u00e0 18&nbsp;h.</p>
+</div></section>'''.format(B=B, TEL=TEL, TEL_HREF=TEL_HREF)
+
+
+def extras(paths):
+    """Fichiers techniques : manifeste, sitemap, robots, page 404."""
+    with open(os.path.join(OUT, "site.webmanifest"), "w", encoding="utf-8") as fh:
+        json.dump(MANIFEST, fh, ensure_ascii=False, indent=1)
+    today = datetime.date.today().isoformat()
+    urls = "".join(f"  <url><loc>{SITE}{p}</loc><lastmod>{today}</lastmod>"
+                   f"<priority>{'1.0' if p == '' else '0.8'}</priority></url>\n" for p in paths)
+    with open(os.path.join(OUT, "sitemap.xml"), "w", encoding="utf-8") as fh:
+        fh.write('<?xml version="1.0" encoding="UTF-8"?>\n'
+                 '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + urls + "</urlset>\n")
+    # Concept : on interdit l'indexation. En production, remplacer par Allow + Sitemap.
+    with open(os.path.join(OUT, "robots.txt"), "w", encoding="utf-8") as fh:
+        fh.write("# Version concept : site non indexable.\n"
+                 "# En production sur le domaine de Fabienne, remplacer par :\n"
+                 "#   User-agent: *\n#   Allow: /\n#   Sitemap: https://www.fabienne-hiot.fr/sitemap.xml\n"
+                 "User-agent: *\nDisallow: /\n")
+    with open(os.path.join(OUT, "404.html"), "w", encoding="utf-8") as fh:
+        fh.write(layout({"title": "Page introuvable \u00b7 Fabienne Hiot, naturopathe",
+                         "description": "Cette page n\u2019existe pas ou plus. Retrouvez les s\u00e9ances, les tarifs et la prise de rendez-vous de Fabienne Hiot, naturopathe \u00e0 Agay.",
+                         "path": "404.html", "nav": "", "og": "cabinet-soin-large"}, render(PAGE404)))
+
+
 def main():
     pages = sorted(f for f in os.listdir(os.path.join(HERE, "pages")) if f.endswith(".html"))
+    paths = []
     for f in pages:
         raw = open(os.path.join(HERE, "pages", f), encoding="utf-8").read()
         head, body = raw.split("\n---\n", 1)
@@ -346,7 +406,11 @@ def main():
         os.makedirs(out_dir, exist_ok=True)
         with open(os.path.join(out_dir, "index.html"), "w", encoding="utf-8") as fh:
             fh.write(layout(meta, render(body)))
+        paths.append(meta["path"])
         print("✓", B + meta["path"])
+
+    extras(paths)
+    print("✓ sitemap.xml, robots.txt, 404.html, site.webmanifest")
 
 if __name__ == "__main__":
     main()
