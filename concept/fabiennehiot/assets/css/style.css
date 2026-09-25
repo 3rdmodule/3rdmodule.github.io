@@ -1,4 +1,4 @@
-/* Fabienne Hiot · Naturopathe — feuille de style */
+/* Fabienne Hiot · Naturopathe - feuille de style */
 
 :root{
   /* Palette : vert pastel dominant, rose poudré de son ancien site, or de ses flyers */
@@ -509,7 +509,7 @@ dialog.lightbox p{color:#fff;text-align:center;margin:12px 0 0;font-size:16px}
 }
 
 /* =========================================================
-   V2 — logo, personnalité, animations
+   V2 - logo, personnalité, animations
    ========================================================= */
 .hand{font-family:var(--script);font-size:clamp(28px,3vw,38px);line-height:1.1;color:var(--plum);margin:0 0 6px;font-weight:400}
 .bg-ink .hand,.cta-band .hand{color:var(--rose)}
@@ -598,7 +598,7 @@ dialog.lightbox p{color:#fff;text-align:center;margin:12px 0 0;font-size:16px}
 .guide-note{font-size:15px;color:var(--muted);margin:18px 0 0}
 @keyframes popIn{from{opacity:0;transform:translateY(10px) scale(.97)}to{opacity:1;transform:none}}
 
-/* Respiration — cohérence cardiaque */
+/* Respiration - cohérence cardiaque */
 .breath{display:grid;grid-template-columns:1fr auto;gap:clamp(28px,5vw,72px);align-items:center}
 .breath-orb{position:relative;width:min(300px,70vw);aspect-ratio:1;display:grid;place-items:center;margin:auto}
 .breath-orb::before,.breath-orb::after{content:"";position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle at 40% 35%,#fff 0,var(--blush-deep) 55%,var(--sage) 100%);transform:scale(.55);transition:transform 5s cubic-bezier(.45,.05,.55,.95);box-shadow:0 20px 60px -20px rgba(68,112,79,.55)}
@@ -659,7 +659,7 @@ dialog.lightbox p{color:#fff;text-align:center;margin:12px 0 0;font-size:16px}
 @media (max-width:640px){.letter::before{display:none}}
 
 /* =========================================================
-   V3 — direction éditoriale (sortir du « look template »)
+   V3 - direction éditoriale (sortir du « look template »)
    ========================================================= */
 :root{--r-sm:4px;--r:6px;--r-lg:10px;--shadow:none;--shadow-lg:0 30px 60px -30px rgba(30,51,40,.35)}
 /* grain de papier */
@@ -833,7 +833,7 @@ h3{font-weight:400}
 .duo div{border-radius:var(--r)}
 
 /* =========================================================
-   V4 — accueil plus court et plus calme, contrastes renforcés
+   V4 - accueil plus court et plus calme, contrastes renforcés
    ========================================================= */
 :root{--muted:#4A524C;--line:#CFDCC8}
 .arch{animation:none}
@@ -881,7 +881,7 @@ a.ki:hover strong{color:var(--plum);text-decoration:underline}
 .info .link-arrow{display:inline-flex;margin-top:4px}
 
 /* =========================================================
-   V5 — plus premium, plus animé (en douceur)
+   V5 - plus premium, plus animé (en douceur)
    ========================================================= */
 @view-transition{navigation:auto}
 ::view-transition-old(root),::view-transition-new(root){animation-duration:.45s}
@@ -1018,7 +1018,7 @@ body{background-image:none;background:var(--ivory)}
 .hero-v5 .ki-phone strong{font-size:28px;white-space:nowrap}
 .hero-v5 .ki-phone+.ki{border-left:0;padding-left:0}
 @media (max-width:960px){.hero-v5 .keyinfo{grid-template-columns:1fr}.hero-v5 .ki-phone{border-bottom:0}}
-/* V5.1 — finitions */
+/* V5.1 - finitions */
 .hm-bg{background:linear-gradient(135deg,var(--blush) 0%,var(--blush-deep) 60%,var(--sage) 100%)}
 .hours .auj{font-style:normal;font-size:13px;font-weight:600;background:var(--plum);color:#fff;border-radius:999px;padding:2px 9px;margin-left:6px;vertical-align:1px}
 .hours li.today{color:var(--ink)}
